@@ -9,7 +9,7 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "ic_iroads.png"
       ],
       "index": "index.html",
       "main": "main.ts",
