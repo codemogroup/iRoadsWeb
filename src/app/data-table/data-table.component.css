@@ -1,0 +1,25 @@
+
+
+.dataArea{
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 75vh;
+
+}
+
+.btnCustom{
+    margin-right: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    width: auto;
+    text-align: center;
+}
+
+.dataTable{
+    margin-top: 20px;
+}
+
+.thead-dark{
+    background-color: #DADADA;
+
+}

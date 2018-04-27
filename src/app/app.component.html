@@ -3,7 +3,8 @@
   <div id="toggleMenuButton" class="toggleMenuButton">
       <i class="fa fa-bars" aria-hidden="true"></i>
   </div>
-  <h1>{{title}}</h1>
+  <img class="titleImg" src="./../ic_iroads.png" height="50" >
+  <p class="appTitle">{{title}}</p>
 </div>
 
 
@@ -13,13 +14,13 @@
           <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
       </div>
       <ul class="navList">
-          <li  routerLink="/dashboard" routerLinkActive="active">
-              <i class="fa fa-address-book" aria-hidden="true"></i>
+          <li  routerLink="/dashboard" routerLinkActive="activeRoute">
+              <i class="fa fa-archive" aria-hidden="true"></i>
               <span>Dashboard</span>
           </li>
-          <li  routerLink="/seeAllData" routerLinkActive="active">
-              <i class="fa fa-university" aria-hidden="true"></i>
-              <span>See Data</span>
+          <li  routerLink="/seeAllData" routerLinkActive="activeRoute">
+              <i class="fas fa-database" aria-hidden="true"></i>
+              <span>Show all data</span>
           </li>
 
       </ul>
