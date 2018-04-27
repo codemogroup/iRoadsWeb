@@ -1,3 +1,54 @@
-<p>
-  data-table works!
-</p>
+<div class="container">
+  <div class="row">
+    <div ng-disabled="loading" class="btn btn-outline-primary btnCustom" (click)="getAllData()">Fetch</div>
+    <div [hidden]="loading || nodata" class="btn btn-outline-primary btnCustom" (click)="clearData()">Clear</div>
+  </div>
+  <div [hidden]="!loading" class="loader">
+    <div class="loadingIcon">
+      <p style="text-align:center">Loading...</p>
+      <img width="70" style="display: block;
+      margin-left: auto;
+      margin-right: auto;" src="./../assets/preloader.gif" alt="">
+    </div>
+  </div>
+
+  <div [hidden]="nodata" class="dataArea">
+
+    <table class="table table-sm dataTable">
+      <thead class="thead-dark">
+        <tr>
+          <!-- <td>ID</td> -->
+          <td>Index</td>
+          <td>AcceX</td>
+          <td>AcceY</td>
+          <td>AcceZ</td>
+          <td>Count</td>
+          <td>Imei</td>
+          <td>Lat</td>
+          <td>Lon</td>
+          <td>OBD Rpm</td>
+          <td>OBD Speed</td>
+          <td>Time</td>
+        </tr>
+      </thead>
+      
+      <tbody >
+        <tr *ngFor="let dataItem of dataItems; index as i">
+          <td>{{i}}</td>
+          <td>{{dataItem.acceX}}</td>
+          <td>{{dataItem.acceY}}</td>
+          <td>{{dataItem.acceZ}}</td>
+          <td>{{dataItem.count}}</td>
+          <td>{{dataItem.iemi}}</td>
+          <td>{{dataItem.lat}}</td>
+          <td>{{dataItem.lon}}</td>
+          <td>{{dataItem.obdRpm}}</td>
+          <td>{{dataItem.obdSpeed}}</td>
+          <td>{{dataItem.time | date:'medium' }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
