@@ -17,8 +17,8 @@ declare let d3:any;
 
 export class GraphComponent implements OnInit {
 
-	private options;
-	private data: Object;
+	public options;
+	public data: Object;
 	constructor(private graphDataService: GraphService) {
 	}
 
