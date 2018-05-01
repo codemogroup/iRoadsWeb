@@ -15,7 +15,6 @@ import { DataItemService } from './data-item.service';
 import { GraphService } from './graph.service';
 import { CustomReuseStrategy } from './custom-reuse-strategy';
 import { GraphComponent } from './graph/graph.component';
-import { D3Service } from 'd3-ng2-service';
 
 
 // d3 and nvd3 should be included somewhere
@@ -52,7 +51,7 @@ const appRoutes: Routes = [
     )
   ],
   providers: [
-  D3Service,
+    // D3Service,
     DataItemService,
     GraphService,
     DatePipe,
