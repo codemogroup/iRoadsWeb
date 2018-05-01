@@ -9,8 +9,10 @@ declare let d3:any;
 @Component({
 	selector: 'app-graph',
 	templateUrl: './graph.component.html',
-	styleUrls: ['./graph.component.css',
-		'/graph.component.nvd3.css'
+	styleUrls: [
+			'./graph.component.css',
+			// './../../assets/nv.d3.min.css',
+			'./../../../node_modules/nvd3/build/nv.d3.min.css'
 	],
 	encapsulation: ViewEncapsulation.None
 })
@@ -71,5 +73,6 @@ export class GraphComponent implements OnInit {
 			.subscribe(data => {
 				this.data = data;
 		});
+		
 	}
 }
