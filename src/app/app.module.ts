@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NvD3Module } from 'ng2-nvd3';
-import {HttpModule} from '@angular/http';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { DataTableComponent } from './data-table/data-table.component';
@@ -25,7 +25,8 @@ const appRoutes: Routes = [
   { path: 'seeAllData', component: DataTableComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'graph', component: GraphComponent },
-  { path: '',
+  {
+    path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full'
   },
@@ -47,6 +48,7 @@ const appRoutes: Routes = [
     HttpModule,
     RouterModule.forRoot(
       appRoutes,
+      { useHash: true }
       // { enableTracing: true } // <-- debugging purposes only
     )
   ],
@@ -55,7 +57,7 @@ const appRoutes: Routes = [
     DataItemService,
     GraphService,
     DatePipe,
-    {provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],
   bootstrap: [AppComponent]
 })
