@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { GraphService } from '../graph.service';
 
-declare let d3: any;
+import { D3Service, D3, Selection } from 'd3-ng2-service'; 
 
 @Component({
 	selector: 'app-graph',
@@ -17,6 +17,7 @@ export class GraphComponent implements OnInit {
 
 	options;
 	data: Object;
+	d3: D3;
 	constructor(private graphDataService: GraphService) { }
 
 	ngOnInit() {
