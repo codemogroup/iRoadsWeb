@@ -2,7 +2,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { GraphService } from '../graph.service';
 
-import { D3Service, D3, Selection } from 'd3-ng2-service'; 
+
+declare let d3:any;
+
 
 @Component({
 	selector: 'app-graph',
@@ -15,53 +17,54 @@ import { D3Service, D3, Selection } from 'd3-ng2-service';
 
 export class GraphComponent implements OnInit {
 
-	options;
-	data: Object;
-	d3: D3;
-	constructor(private graphDataService: GraphService) { }
+	private options;
+	private data: Object;
+	constructor(private graphDataService: GraphService) {
+	}
 
 	ngOnInit() {
+		
 		this.options = {
 			chart: {
-				type: 'lineWithFocusChart',
-				height: 450,
-				margin: {
-					top: 20,
-					right: 20,
-					bottom: 60,
-					left: 40
-				},
-				duration: 50,
-				xAxis: {
-					axisLabel: 'Time',
-					tickFormat: function(d) {
-						return d3.format(',f')(d);
-					}
-				},
-				x2Axis: {
-					tickFormat: function(d) {
-						return d3.format(',f')(d);
-					}
-				},
-				yAxis: {
-					axisLabel: 'ms-2',
-					tickFormat: function(d) {
-						return d3.format(',.2f')(d);
-					},
-					rotateYLabel: false
-				},
-				y2Axis: {
-					tickFormat: function(d) {
-						return d3.format(',.2f')(d);
-					}
-				}
+                type: 'lineWithFocusChart',
+                height: 450,
+                margin : {
+                    top: 20,
+                    right: 20,
+                    bottom: 60,
+                    left: 40
+                },
+                transitionDuration: 500,
+                xAxis: {
+                    axisLabel: '(time s)',
+                    tickFormat: function(d){
+                        return d3.format(',f')(d);
+                    }
+                },
+                x2Axis: {
+                    tickFormat: function(d){
+                        return d3.format(',f')(d);
+                    }
+                },
+                yAxis: {
+                    axisLabel: '(ms-2)',
+                    tickFormat: function(d){
+                        return d3.format(',.2f')(d);
+                    },
+                    rotateYLabel: false
+                },
+                y2Axis: {
+                    tickFormat: function(d){
+                        return d3.format(',.2f')(d);
+                    }
+                }
 
-			}
-		};
-
+            }
+        };
 
 		this.getData();
 	}
+
 
 	getData(): void {
 		this.graphDataService.getAllData()
