@@ -8,8 +8,7 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        "assets",
-        "ic_iroads.png"
+        "assets" 
       ],
       "index": "index.html",
       "main": "main.ts",

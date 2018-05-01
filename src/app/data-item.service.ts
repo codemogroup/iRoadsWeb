@@ -10,7 +10,12 @@ import { window } from 'rxjs/operators/window';
 @Injectable()
 export class DataItemService {
 
-  private getAllDataUrl = 'https://iroadsrest.herokuapp.com/getall';
+  private rootUrl = 'http://localhost:8080';
+  private rootUrlHeroku = 'https://iroadsrest.herokuapp.com';
+
+  private getAllDataUrl = this.rootUrlHeroku + '/getall';
+
+
 
   constructor(private http: HttpClient) { }
 
