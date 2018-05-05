@@ -13,7 +13,7 @@ export class DataItemService {
   private rootUrl = 'http://localhost:8080';
   private rootUrlHeroku = 'https://iroadsrest.herokuapp.com';
 
-  private getAllDataUrl = this.rootUrlHeroku + '/getall';
+  private getAllDataUrl = this.rootUrlHeroku + '/getAll';
 
 
 
