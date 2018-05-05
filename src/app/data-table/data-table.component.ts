@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router, NavigationStart, NavigationCancel, NavigationEnd } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 import { DataItem } from '../data-item';
@@ -18,7 +17,7 @@ export class DataTableComponent implements OnInit {
   loading;
   nodata;
 
-  constructor(private dataItemService: DataItemService, private router: Router) {
+  constructor(private dataItemService: DataItemService) {
     this.nodata = true;
     this.loading = false;
   }

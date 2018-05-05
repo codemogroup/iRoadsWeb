@@ -6,6 +6,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NvD3Module } from 'ng2-nvd3';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { DataTableComponent } from './data-table/data-table.component';
@@ -43,13 +44,13 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     NvD3Module,
     HttpClientModule,
     HttpModule,
     RouterModule.forRoot(
       appRoutes,
       { useHash: true }
-      // { enableTracing: true } // <-- debugging purposes only
     )
   ],
   providers: [

@@ -6,7 +6,6 @@ export class DataItem {
     acceZ: number;
     count: number;
     imei: string;
-    iemi: string;
     lat: number;
     lon: number;
     obdRpm: number;

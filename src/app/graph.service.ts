@@ -10,38 +10,46 @@ import { window } from 'rxjs/operators/window';
 @Injectable()
 export class GraphService {
 
-	private rootUrl = 'http://localhost:8080';
-	private rootUrlHeroku = 'https://iroadsrest.herokuapp.com';
+    private rootUrl = 'http://localhost:8080/';
+    private rootUrlHeroku = 'https://iroadsrest.herokuapp.com/';
 
-	private getDataUrl = './assets/dummyData.json';
-
-	constructor(private http: HttpClient) { }
-
-
-	getAllData(): Observable<Object[]> {
-		return this.http.get<Object[]>(this.getDataUrl).pipe(
-			tap(dataItems => console.log(`fetched data`)),
-			catchError(this.handleError('getAllData', []))
-		);
-	}
+    private getJourneyIDsUrl = this.rootUrlHeroku + 'getJourneyIDs';
+    private getGraphDataUrl = this.rootUrlHeroku + 'getGraph?journeyID=';
 
 
-	private handleError<T>(operation = 'operation', result?: T) {
-		return (error: any): Observable<T> => {
+    constructor(private http: HttpClient) { }
 
-			// TODO: send the error to remote logging infrastructure
-			console.error(error); // log to console instead
+    getJourneyIDs(): Observable<Object[]> {
+        return this.http.get<Object[]>(this.getJourneyIDsUrl).pipe(
+            tap(dataItems => console.log(`journeyIDs fetched`)),
+            catchError(this.handleError('getJourneyIDs', []))
+        );
+    }
 
-			// TODO: better job of transforming error for user consumption
-			this.log(`${operation} failed: ${error.message}`);
+    getGraphData(journeyID): Observable<Object[]> {
+        return this.http.get<Object[]>(this.getGraphDataUrl + journeyID).pipe(
+            tap(dataItems => console.log(`graph data fetched`)),
+            catchError(this.handleError('getGraphData', []))
+        );
+    }
 
-			// Let the app keep running by returning an empty result.
-			return of(result as T);
-		};
-	}
 
-	log(message: string) {
-		alert(message);
-	}
+    private handleError<T>(operation = 'operation', result?: T) {
+        return (error: any): Observable<T> => {
+
+            // TODO: send the error to remote logging infrastructure
+            console.error(error); // log to console instead
+
+            // TODO: better job of transforming error for user consumption
+            this.log(`${operation} failed: ${error.message}`);
+
+            // Let the app keep running by returning an empty result.
+            return of(result as T);
+        };
+    }
+
+    log(message: string) {
+        alert(message);
+    }
 
 }
