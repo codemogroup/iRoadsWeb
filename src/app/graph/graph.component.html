@@ -1,5 +1,40 @@
-<div class="container">
-    <div class="graph">
-      <nvd3 [options]="options" [data]="data"></nvd3>
+<div class="container row selectionArea">
+  <div class="col-md-6 col-sm-6 col-8">
+    <label class="form-group col-12" for="inputState">Journey ID</label>
+    <div class="input-group ">
+      <select id="inputState" class="form-control" [(ngModel)]="selectedID" (ngModelChange)="selectID()">
+        <option value="select" selected>Select Journey ID</option>
+        <option *ngFor="let journeyIdObj of journeyIDs" [value]="journeyIdObj.journeyID">{{journeyIdObj.journeyID}}</option>
+      </select>
+      <span class="input-group-btn">
+        <button class="btn btn-outline-primary" type="button" tabindex="-1" (click)="refreshIDs()">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </span>
     </div>
+  </div>
+  <div [hidden]="!loadingIDs" class="col-md-3 col-sm-3 col-4 loaderId">
+    <label for=""></label>
+    <div class="loadingIcon">
+      <img width="37" style="
+      margin-left: auto;
+      margin-top: 15px;
+      margin-right: auto;" src="./../assets/preloader.gif" alt="">
+      <p style="text-align:center;display: inline"></p>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!loadingGraphData" class="loader">
+  <div class="loadingIcon">
+    <p style="text-align:center">Loading Graph...</p>
+    <img width="70" style="display: block;
+    margin-left: auto;
+    margin-right: auto;" src="./../assets/preloader.gif" alt="">
+  </div>
+</div>
+<div class="container">
+  <div class="graph">
+    <nvd3 [options]="options" [data]="graphData"></nvd3>
+  </div>
 </div>
