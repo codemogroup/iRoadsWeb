@@ -16,6 +16,7 @@ import { DataItemService } from './data-item.service';
 import { GraphService } from './graph.service';
 import { CustomReuseStrategy } from './custom-reuse-strategy';
 import { GraphComponent } from './graph/graph.component';
+import { MapComponent } from './map/map.component';
 
 
 // d3 and nvd3 should be included somewhere
@@ -26,6 +27,7 @@ const appRoutes: Routes = [
   { path: 'seeAllData', component: DataTableComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'graph', component: GraphComponent },
+  { path: 'map', component: MapComponent },
   {
     path: '',
     redirectTo: '/dashboard',
@@ -40,7 +42,8 @@ const appRoutes: Routes = [
     DataTableComponent,
     DashboardComponent,
     PageNotFoundComponent,
-    GraphComponent
+    GraphComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
