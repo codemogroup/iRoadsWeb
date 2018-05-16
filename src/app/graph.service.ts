@@ -13,7 +13,7 @@ export class GraphService {
     private rootUrl = 'http://localhost:8080/';
     private rootUrlHeroku = 'https://iroadsrest.herokuapp.com/';
 
-    private getJourneyIDsUrl = this.rootUrlHeroku + 'getJourneyIDs';
+    private getJourneyIDsUrl = this.rootUrlHeroku + 'getJourneyNames';
     private getGraphDataUrl = this.rootUrlHeroku + 'getGraph?journeyID=';
 
 

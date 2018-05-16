@@ -1,10 +1,10 @@
 <div class="container row selectionArea">
   <div class="col-md-6 col-sm-6 col-8">
-    <label class="form-group col-12" for="inputState">Journey ID</label>
+    <label class="form-group col-12" for="inputState">Journey Name</label>
     <div class="input-group ">
       <select id="inputState" class="form-control" [(ngModel)]="selectedID" (ngModelChange)="selectID()">
-        <option value="select" selected>Select Journey ID</option>
-        <option *ngFor="let journeyIdObj of journeyIDs" [value]="journeyIdObj.journeyID">{{journeyIdObj.journeyID}}</option>
+        <option value="select" selected>Select Journey Name</option>
+        <option *ngFor="let journeyIdObj of journeyIDs" [value]="journeyIdObj.journeyID">{{journeyIdObj.journeyName}}</option>
       </select>
       <span class="input-group-btn">
         <button class="btn btn-outline-primary" type="button" tabindex="-1" (click)="refreshIDs()">
