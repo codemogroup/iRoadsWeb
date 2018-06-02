@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+declare let L: any;
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -10,6 +10,7 @@ export class MapComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
   }
 
 }
