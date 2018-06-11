@@ -70,7 +70,7 @@
 
 .content {
     height: calc(100vh);
-    padding-top: 80px;
+    padding-top: 60px;
     overflow-y: hidden;
     width: auto;
 }
