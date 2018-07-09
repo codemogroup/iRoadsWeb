@@ -1,6 +1,6 @@
 <div class="container row selectionArea">
   <div class="col-md-6 col-sm-6 col-8">
-    <label class="form-group col-12" for="inputState">Journey Name</label>
+    <!-- <label class="form-group col-12" for="inputState">Journey Name</label> -->
     <div class="input-group ">
       <select id="inputState" class="form-control" [(ngModel)]="selectedID" (ngModelChange)="selectID()">
         <option value="select" selected>Select Journey Name</option>
@@ -14,11 +14,11 @@
     </div>
   </div>
   <div [hidden]="!loadingIDs" class="col-md-3 col-sm-3 col-4 loaderId">
-    <label for=""></label>
+    <!-- <label for=""></label> -->
     <div class="loadingIcon">
       <img width="37" style="
       margin-left: auto;
-      margin-top: 15px;
+      margin-top: 0px;
       margin-right: auto;" src="./../assets/preloader.gif" alt="">
       <p style="text-align:center;display: inline"></p>
     </div>
