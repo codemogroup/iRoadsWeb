@@ -17,11 +17,12 @@ import { GraphService } from './graph.service';
 import { CustomReuseStrategy } from './custom-reuse-strategy';
 import { GraphComponent } from './graph/graph.component';
 import { MapComponent } from './map/map.component';
-
+import { MapService } from './map.service';
 
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
+
 
 const appRoutes: Routes = [
   { path: 'seeAllData', component: DataTableComponent },
@@ -60,6 +61,7 @@ const appRoutes: Routes = [
     // D3Service,
     DataItemService,
     GraphService,
+    MapService,
     DatePipe,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],
