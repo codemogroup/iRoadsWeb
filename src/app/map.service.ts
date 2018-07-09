@@ -7,8 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class MapService {
 
-  // private rootUrl = 'http://iroads.projects.mrt.ac.lk:8080/';
-  private rootUrl = 'http://localhost:8080/';
+  private rootUrl = 'http://iroads.projects.mrt.ac.lk:8080/';
+//   private rootUrl = 'http://localhost:8080/';
   private rootUrlHeroku = 'https://iroadsrest.herokuapp.com/';
 
   private getJourneyIDsUrl = this.rootUrl + 'getJourneyNames';
