@@ -2,7 +2,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { GraphService } from '../graph.service';
 import { empty } from 'rxjs/Observer';
-
+import { Journey } from '../journey';
+import { DatePipe } from '@angular/common';
+import {NgSelectizeModule} from 'ng-selectize';
 
 declare let d3: any;
 
@@ -23,7 +25,7 @@ export class GraphComponent implements OnInit {
     public options;
     public graphData: Object;
 
-    public journeyIDs: Object[];
+    public journeyIDs: Journey[];
     public selectedID;
 
     loadingIDs;
@@ -119,4 +121,34 @@ export class GraphComponent implements OnInit {
             }
         };
     }
+
+
+
+// selectize js
+    placeholder: string = 'Select a journey...';
+    config = {
+        labelField: 'journeyName',
+        valueField: 'journeyID',
+        highlight: true,
+        create:false,
+        persist:true,
+        searchField:'journeyName',
+        dropdownDirection: 'down',
+        maxItems: 1,
+        render: {
+            option: function(item, escape) {
+                var date= new Date(item.syncTime);
+                var min= date.getMinutes()<10 ? "0"+date.getMinutes() :date.getMinutes();
+                var hours= date.getHours()<10 ? "0"+date.getHours() :date.getHours();
+                var formatDate=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+hours+":"+min;
+                return '<div style="padding:10px">'+'<span class="title">' +
+                            '<span class="name">' + escape(item.journeyName) + '</span>' +
+                        '</span>' +
+                        '<span style="float:right; color:#808080">' + escape(formatDate) + '</span>'+
+                        '</div>';
+            }
+        }
+
+    };
+
 }

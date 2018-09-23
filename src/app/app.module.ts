@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { NvD3Module } from 'ng2-nvd3';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+import {NgSelectizeModule} from 'ng-selectize';
 
 import { AppComponent } from './app.component';
 import { DataTableComponent } from './data-table/data-table.component';
@@ -22,6 +23,7 @@ import { MapService } from './map.service';
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
+import { GlobalSharingService } from './global-sharing.service';
 
 
 const appRoutes: Routes = [
@@ -52,6 +54,7 @@ const appRoutes: Routes = [
     NvD3Module,
     HttpClientModule,
     HttpModule,
+    NgSelectizeModule,
     RouterModule.forRoot(
       appRoutes,
       { useHash: true }
@@ -62,6 +65,7 @@ const appRoutes: Routes = [
     DataItemService,
     GraphService,
     MapService,
+    GlobalSharingService,
     DatePipe,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],

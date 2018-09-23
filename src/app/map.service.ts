@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Journey } from './journey';
 
 @Injectable()
 export class MapService {
@@ -17,8 +18,8 @@ export class MapService {
 
   constructor(private http: HttpClient) { }
 
-  getJourneyIDs(): Observable<Object[]> {
-      return this.http.get<Object[]>(this.getJourneyIDsUrl).pipe(
+  getJourneyIDs(): Observable<Journey[]> {
+      return this.http.get<Journey[]>(this.getJourneyIDsUrl).pipe(
           tap(dataItems => console.log(`journeyIDs fetched`)),
           catchError(this.handleError('getJourneyIDs', []))
       );

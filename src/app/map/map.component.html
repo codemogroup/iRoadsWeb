@@ -1,17 +1,15 @@
-<div style="height: 10vh;" class="container row selectionArea">
+<div style="height: 10vh; margin-left: 3px" class="container row selectionArea">
   <div class="col-md-6 col-sm-6 col-8">
     <!-- <label class="form-group col-12" for="inputState">Journey Name</label> -->
-    <div class="input-group ">
-      <select id="inputState" class="form-control" [(ngModel)]="selectedID" (ngModelChange)="selectID()">
-        <option value="select" selected>Select Journey Name</option>
-        <option *ngFor="let journeyIdObj of journeyIDs" [value]="journeyIdObj.journeyID">{{journeyIdObj.journeyName}}</option>
-      </select>
-      <span class="input-group-btn">
+    <!-- <div class="form-control"> -->
+      <ng-selectize style="width: 90%;display: inline-block;z-index: -1;" [config]="config" [options]="journeyIDs" [placeholder]="placeholder"
+        [(ngModel)]="selectedID" (ngModelChange)="selectID()"></ng-selectize>
+      <span style="float:right;width: 9%" class="input-group-btn">
         <button class="btn btn-outline-primary" type="button" tabindex="-1" (click)="refreshIDs()">
           <i class="fas fa-sync-alt"></i>
         </button>
       </span>
-    </div>
+    <!-- </div> -->
   </div>
   <div [hidden]="!loadingIDs" class="col-md-3 col-sm-3 col-4 loaderId">
     <!-- <label for=""></label> -->

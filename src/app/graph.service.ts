@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { DataItem } from './data-item';
 import { window } from 'rxjs/operators/window';
+import { Journey } from './journey';
 
 @Injectable()
 export class GraphService {
@@ -19,8 +20,8 @@ export class GraphService {
 
     constructor(private http: HttpClient) { }
 
-    getJourneyIDs(): Observable<Object[]> {
-        return this.http.get<Object[]>(this.getJourneyIDsUrl).pipe(
+    getJourneyIDs(): Observable<Journey[]> {
+        return this.http.get<Journey[]>(this.getJourneyIDsUrl).pipe(
             tap(dataItems => console.log(`journeyIDs fetched`)),
             catchError(this.handleError('getJourneyIDs', []))
         );
