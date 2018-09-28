@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
+import {Journey} from '../journey'
+
 declare let L: any;
 @Component({
     selector: 'app-map',
@@ -156,5 +158,15 @@ export class MapComponent implements OnInit {
         }
 
     };
+
+    getSelectionDate(option: Journey) {
+        var date = new Date(option.syncTime);
+        var min = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var monthWithout0strt = date.getMonth() + 1;
+        var formatDate = date.getDate() + "/" + monthWithout0strt + "/" + date.getFullYear() + " " + hours + ":" + min;
+        return formatDate;
+    }
+
 
 }

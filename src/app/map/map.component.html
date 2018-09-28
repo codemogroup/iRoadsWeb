@@ -1,14 +1,21 @@
-<div style="height: 10vh; margin-left: 3px" class="container row selectionArea">
+<div style="height: 10vh; margin-left: 10px" class="container row selectionArea">
   <div class="col-md-6 col-sm-6 col-8">
-    <!-- <label class="form-group col-12" for="inputState">Journey Name</label> -->
-    <!-- <div class="form-control"> -->
-      <ng-selectize style="width: 90%;display: inline-block;z-index: -1;" [config]="config" [options]="journeyIDs" [placeholder]="placeholder"
-        [(ngModel)]="selectedID" (ngModelChange)="selectID()"></ng-selectize>
-      <span style="float:right;width: 9%" class="input-group-btn">
-        <button class="btn btn-outline-primary" type="button" tabindex="-1" (click)="refreshIDs()">
-          <i class="fas fa-sync-alt"></i>
-        </button>
-      </span>
+
+    <ngx-select optionValueField="journeyID" optionTextField="journeyName" style="width: 90%;display: inline-block;" [items]="journeyIDs"
+      (select)="selectID()" [(ngModel)]="selectedID">
+      <ng-template ngx-select-option let-option let-text="text">
+        <div style="padding:10px"> <span class="title">
+            <span class="name"> {{option.data.journeyName}} </span>
+          </span>
+          <span style="float:right;"> {{getSelectionDate(option.data)}} </span>
+        </div>
+      </ng-template>
+    </ngx-select>
+    <span style="float:right;width: 9%" class="input-group-btn">
+      <button class="btn btn-outline-primary" type="button" tabindex="-1" (click)="refreshIDs()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </span>
     <!-- </div> -->
   </div>
   <div [hidden]="!loadingIDs" class="col-md-3 col-sm-3 col-4 loaderId">
@@ -32,7 +39,4 @@
   </div>
 </div>
 
-<div id="mapid" style="height: 75vh; width: 100%; margin-top: 1vh;"> </div>
-
-
-
+<div id="mapid" style="height: 75vh; width: 100%;"> </div>
