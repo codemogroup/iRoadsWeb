@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 import { NvD3Module } from 'ng2-nvd3';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { NgxSelectModule, INgxSelectOptions  } from 'ngx-select-ex';
+import { NgxSelectModule  } from 'ngx-select-ex';
 
 import { AppComponent } from './app.component';
 import { DataTableComponent } from './data-table/data-table.component';
