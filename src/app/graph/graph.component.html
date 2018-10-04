@@ -19,19 +19,7 @@
     </span>
     <!-- </div> -->
   </div>
-  <div class="col-md-6 col-sm-6 col-8">
-    <span  class="input-group-btn">
-      <button [disabled]="disablePrevious" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="previousPart()">
-       PREVIOUS
-      </button>
-    </span>
 
-    <span class="input-group-btn">
-      <button [disabled]="disableNext" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="nextPart()">
-        NEXT
-      </button>
-    </span>
-  </div>
   <div [hidden]="!loadingIDs" class="col-md-3 col-sm-3 col-4 loaderId">
     <!-- <label for=""></label> -->
     <div class="loadingIcon">
@@ -52,8 +40,26 @@
     margin-right: auto;" src="./../assets/preloader.gif" alt="">
   </div>
 </div>
-<div class="container">
+<div class="container ">
   <div class="graph">
     <nvd3 [options]="options" [data]="graphDataPart"></nvd3>
   </div>
+  <div style="width:100%; margin-top: 15px" [hidden]="!loaded">
+
+    <div style="float:left;width:100px;"  class="input-group-btn">
+      <button [disabled]="disablePrevious" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="previousPart()">
+        <i class="fas fa-step-backward"></i> prev
+      </button>
+    </div>
+
+    <div style="float:right;width:100px; " class="input-group-btn">
+      <button [disabled]="disableNext" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="nextPart()">
+       next <i class="fas fa-step-forward"></i>
+      </button>
+    </div>
+
+    <div style="margin:0 auto;width:100px">
+      <span> <b>Graph {{graphPart}}</b></span>
+    </div>
+</div>
 </div>

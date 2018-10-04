@@ -31,12 +31,17 @@ export class GraphComponent implements OnInit {
     public disablePrevious:boolean;
     public disableNext:boolean;
 
+    public graphPart:string;
+    private noOfParts:number;
+
     public journeyIDs: Journey[];
     public selectedID;
 
     loadingIDs;
     loadingGraphData;
     noGraphData;
+    loaded;
+
     public selectControl = new FormControl();
 
     constructor(private graphDataService: GraphService) {
@@ -90,15 +95,18 @@ export class GraphComponent implements OnInit {
         this.graphDataService.getGraphData(journeyID)
             .subscribe(data => {
                 console.log(data.length)
+                this.noOfParts=data.length;
                 this.part=0;
                 this.disableNext=false;
                 this.disablePrevious=true;
+
+                this.loaded=true;
 
                 this.graphData = data;
                 this.loadingGraphData = false;
                 this.noGraphData = false;
                 this.loadGraphPartByPart();
-                
+                this.graphPart=this.part+1+"/"+this.noOfParts;
             });
 
     }
@@ -112,6 +120,7 @@ export class GraphComponent implements OnInit {
         if(this.graphData.length==this.part+1){
             this.disableNext=true;
         }
+        this.graphPart=this.part+1+"/"+this.noOfParts;
         console.log("part:"+this.part)
     }
 
@@ -126,6 +135,7 @@ export class GraphComponent implements OnInit {
         }else{
             this.disablePrevious=true;
         }
+        this.graphPart=this.part+1+"/"+this.noOfParts;
         console.log("part:"+this.part)
     }
 
