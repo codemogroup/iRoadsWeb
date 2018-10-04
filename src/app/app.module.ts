@@ -24,6 +24,7 @@ import { MapService } from './map.service';
 import 'd3';
 import 'nvd3';
 import { GlobalSharingService } from './global-sharing.service';
+import { DashboardService } from './dashboard.service';
 
 
 const appRoutes: Routes = [
@@ -67,6 +68,7 @@ const appRoutes: Routes = [
     DataItemService,
     GraphService,
     MapService,
+    DashboardService,
     GlobalSharingService,
     DatePipe,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
