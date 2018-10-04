@@ -23,7 +23,13 @@ declare let d3: any;
 export class GraphComponent implements OnInit {
 
     public options;
-    public graphData: Object;
+    public graphData: Object[];
+
+    public graphDataPart: Object;
+    private part:number;
+    private partLimit:number;
+    public disablePrevious:boolean;
+    public disableNext:boolean;
 
     public journeyIDs: Journey[];
     public selectedID;
@@ -34,6 +40,12 @@ export class GraphComponent implements OnInit {
     public selectControl = new FormControl();
 
     constructor(private graphDataService: GraphService) {
+
+        this.disablePrevious=true;
+        this.disableNext=true;
+
+        this.part=0;
+        this.partLimit=1000000;
         this.loadingGraphData = false;
         this.noGraphData = true;
 
@@ -77,13 +89,51 @@ export class GraphComponent implements OnInit {
     getGraphData(journeyID): void {
         this.graphDataService.getGraphData(journeyID)
             .subscribe(data => {
+                console.log(data.length)
+                this.part=0;
+                this.disableNext=false;
+                this.disablePrevious=true;
+
                 this.graphData = data;
                 this.loadingGraphData = false;
                 this.noGraphData = false;
+                this.loadGraphPartByPart();
                 this.setGraphConfig();
             });
 
     }
+
+    nextPart(){
+        this.part++;
+        this.loadGraphPartByPart();
+        if(this.part>0){
+            this.disablePrevious=false;
+        }
+        if(this.graphData.length==this.part+1){
+            this.disableNext=true;
+        }
+        console.log("part:"+this.part)
+    }
+
+    previousPart(){
+        if(this.part>0){
+            this.part--;
+            this.loadGraphPartByPart()
+            this.disableNext=false;
+            if(this.part==0){
+                this.disablePrevious=true;
+            }
+        }else{
+            this.disablePrevious=true;
+        }
+        console.log("part:"+this.part)
+    }
+
+    loadGraphPartByPart(){
+        this.graphDataPart=this.graphData[this.part];
+    }
+
+
 
     setGraphConfig() {
         this.options = {

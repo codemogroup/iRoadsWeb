@@ -17,8 +17,12 @@ export class GraphService {
     private getJourneyIDsUrl = this.rootUrl + 'getJourneyNames';
     private getGraphDataUrl = this.rootUrl + 'getGraph?journeyID=';
 
+    private graphSplitByValue:number;
 
-    constructor(private http: HttpClient) { }
+
+    constructor(private http: HttpClient) {
+        this.graphSplitByValue=1000;
+     }
 
     getJourneyIDs(): Observable<Journey[]> {
         return this.http.get<Journey[]>(this.getJourneyIDsUrl).pipe(
@@ -28,7 +32,7 @@ export class GraphService {
     }
 
     getGraphData(journeyID): Observable<Object[]> {
-        return this.http.get<Object[]>(this.getGraphDataUrl + journeyID).pipe(
+        return this.http.get<Object[]>(this.getGraphDataUrl + journeyID+"&splitBy=" + this.graphSplitByValue).pipe(
             tap(dataItems => console.log(`graph data fetched`)),
             catchError(this.handleError('getGraphData', []))
         );

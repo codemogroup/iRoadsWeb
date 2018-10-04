@@ -18,7 +18,19 @@
       </button>
     </span>
     <!-- </div> -->
+  </div>
+  <div class="col-md-6 col-sm-6 col-8">
+    <span  class="input-group-btn">
+      <button [disabled]="disablePrevious" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="previousPart()">
+       PREVIOUS
+      </button>
+    </span>
 
+    <span class="input-group-btn">
+      <button [disabled]="disableNext" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="nextPart()">
+        NEXT
+      </button>
+    </span>
   </div>
   <div [hidden]="!loadingIDs" class="col-md-3 col-sm-3 col-4 loaderId">
     <!-- <label for=""></label> -->
@@ -42,6 +54,6 @@
 </div>
 <div class="container">
   <div class="graph">
-    <nvd3 [options]="options" [data]="graphData"></nvd3>
+    <nvd3 [options]="options" [data]="graphDataPart"></nvd3>
   </div>
 </div>
