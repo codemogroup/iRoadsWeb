@@ -98,7 +98,7 @@ export class GraphComponent implements OnInit {
                 this.loadingGraphData = false;
                 this.noGraphData = false;
                 this.loadGraphPartByPart();
-                this.setGraphConfig();
+                
             });
 
     }
@@ -131,6 +131,7 @@ export class GraphComponent implements OnInit {
 
     loadGraphPartByPart(){
         this.graphDataPart=this.graphData[this.part];
+        this.setGraphConfig();
     }
 
 
