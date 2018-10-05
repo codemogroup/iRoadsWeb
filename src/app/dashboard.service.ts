@@ -16,7 +16,7 @@ export class DashboardService {
   constructor(private http: HttpClient) { }
 
 
-  getSummary(): Observable<SummaryObj> {
+  getSummary():Observable<SummaryObj> {
     return this.http.get<SummaryObj>(this.getSummaryUrl).pipe(
         tap(dataItems => console.log(`summary fetched`)),
         catchError(this.handleError('getSummary', []))

@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getSummary();
+    this.summary=new SummaryObj();
   }
 
 

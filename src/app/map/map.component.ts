@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
-import {Journey} from '../journey'
+import { Journey } from '../journey'
 
 declare let L: any;
 @Component({
@@ -77,15 +77,6 @@ export class MapComponent implements OnInit {
         this.mymap.fitBounds(this.polyline.getBounds());
     }
 
-
-
-    onMapClick(e): void {
-        console.log("clicked" + e);
-        var popup = L.popup();
-        popup.setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(this.mymap);
-    }
     configureMap(): void {
         this.mymap = L.map('mapid').setView([6.799212, 79.901183], 15);
 
@@ -96,8 +87,8 @@ export class MapComponent implements OnInit {
             accessToken: 'pk.eyJ1IjoiY29kZW1vIiwiYSI6ImNqaWFuNDh2aTE5M2Mza3J4YWd6MWoxNmwifQ.Dp5h88FvHAfAHaSRl508jQ'
         }).addTo(this.mymap);
 
-        var marker = L.marker([6.799212, 79.901183]).addTo(this.mymap);
-        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+        // var marker = L.marker([6.799212, 79.901183]).addTo(this.mymap);
+        // marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
 
         var map = this.mymap;
@@ -105,7 +96,7 @@ export class MapComponent implements OnInit {
         this.mymap.on('click', function (e) {
             var popup = L.popup();
             popup.setLatLng(e.latlng)
-                .setContent(e.latlng.toString())
+                .setContent(e.latlng.lat + "," + e.latlng.lng)
                 .openOn(map);
         });
 

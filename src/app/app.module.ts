@@ -25,13 +25,15 @@ import 'd3';
 import 'nvd3';
 import { GlobalSharingService } from './global-sharing.service';
 import { DashboardService } from './dashboard.service';
+import { PredictedMapComponent } from './predicted-map/predicted-map.component';
 
 
 const appRoutes: Routes = [
   { path: 'seeAllData', component: DataTableComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'graph', component: GraphComponent },
-  { path: 'map', component: MapComponent },
+  { path: 'journeyMap', component: MapComponent },
+  { path: 'predictedMap', component: PredictedMapComponent },
   {
     path: '',
     redirectTo: '/dashboard',
@@ -49,7 +51,8 @@ const appRoutes: Routes = [
     DashboardComponent,
     PageNotFoundComponent,
     GraphComponent,
-    MapComponent
+    MapComponent,
+    PredictedMapComponent
   ],
   imports: [
     BrowserModule,

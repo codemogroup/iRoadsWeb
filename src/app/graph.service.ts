@@ -12,7 +12,7 @@ import { Journey } from './journey';
 export class GraphService {
 
     private rootUrl = 'http://iroads.projects.mrt.ac.lk:8080/';
-    private rootUrlHeroku = 'https://iroadsrest.herokuapp.com/';
+   
 
     private getJourneyIDsUrl = this.rootUrl + 'getJourneyNames';
     private getGraphDataUrl = this.rootUrl + 'getGraph?journeyID=';
