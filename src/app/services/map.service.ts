@@ -17,6 +17,8 @@ export class MapService {
 
     private getPredictedDataUrl ="./../assets/predictedDil.json";
 
+    private getTaggedDataUrl =this.rootUrl+'getAllTags';
+
     constructor(private http: HttpClient) { }
 
     getJourneyIDs(): Observable<Journey[]> {
@@ -38,6 +40,13 @@ export class MapService {
         return this.http.get<Object[]>(this.getPredictedDataUrl ).pipe(
             tap(dataItems => console.log(`predicted data fetched`)),
             catchError(this.handleError('getPredictedData', []))
+        );
+    }
+
+    getTaggedData():Observable<Object[]> {
+        return this.http.get<Object[]>(this.getTaggedDataUrl ).pipe(
+            tap(dataItems => console.log(`tagged data fetched`)),
+            catchError(this.handleError('getTaggedData', []))
         );
     }
 

@@ -1,0 +1,31 @@
+<div style="height: 10vh; margin-left: 10px" class="container row selectionArea">
+
+  <div style="margin:10px 0px; width:100%;padding-right: 70px">
+    <div style="display: inline;float:right;color: blue"  class="custom-control custom-checkbox my-1 mr-sm-2">
+      <input type="checkbox" class="custom-control-input" id="taggedAnomalies"
+      [checked]="taggedCheckBox"
+      (change)="taggedCheckBoxChanged()"
+      >
+      <label class="custom-control-label" for="taggedAnomalies">Tagged Anomalies</label>
+    </div>
+
+    <div style="display: inline;float:right;color: red" class="custom-control custom-checkbox my-1 mr-sm-2">
+      <input type="checkbox" class="custom-control-input" id="predictedAnomalies"
+      [checked]="predictedCheckBox"
+      (change)="predictedCheckBoxChanged()"
+      >
+      <label class="custom-control-label" for="predictedAnomalies">Predicted Anomalies</label>
+    </div>
+  </div>
+
+  <div [hidden]="!loadingAnomalyData" class="loader">
+    <div class="loadingIcon">
+      <p style="text-align:center">Loading Anomalies...</p>
+      <img width="70" style="display: block;
+      margin-left: auto;
+      margin-right: auto;" src="./../assets/preloader.gif" alt="">
+    </div>
+  </div>
+
+  <div id="mapid" style="height: 77vh; width: 100%;"> </div>
+</div>

@@ -74,8 +74,15 @@ export class MapComponent implements OnInit {
     }
 
     addLocationsToMap(): void {
-        this.polyline = L.polyline(this.locationData, { color: 'red' }).addTo(this.mymap);
+        this.polyline = L.polyline(this.locationData, { color: 'red' })
+            // .bindPopup(" ")
+            .addTo(this.mymap);
         this.mymap.fitBounds(this.polyline.getBounds());
+    }
+
+
+    deletePath(){
+        console.log("delete click");
     }
 
     configureMap(): void {

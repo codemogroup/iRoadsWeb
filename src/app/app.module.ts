@@ -22,6 +22,7 @@ import 'd3';
 import 'nvd3';
 import { PredictedMapComponent } from './predicted-map/predicted-map.component';
 import { ServicesModule } from './services/services.module';
+import { AnomaliesComponent } from './anomalies/anomalies.component';
 
 
 const appRoutes: Routes = [
@@ -29,7 +30,7 @@ const appRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'graph', component: GraphComponent },
   { path: 'journeyMap', component: MapComponent },
-  { path: 'predictedMap', component: PredictedMapComponent },
+  { path: 'predictedMap', component: AnomaliesComponent },
   {
     path: '',
     redirectTo: '/dashboard',
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     GraphComponent,
     MapComponent,
-    PredictedMapComponent
+    PredictedMapComponent,
+    AnomaliesComponent
   ],
   imports: [
     ServicesModule,
