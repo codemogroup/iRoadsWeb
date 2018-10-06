@@ -48,7 +48,6 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     GraphComponent,
     MapComponent,
-    PredictedMapComponent,
     AnomaliesComponent
   ],
   imports: [
