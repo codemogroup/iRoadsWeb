@@ -20,7 +20,6 @@ import { MapComponent } from './map/map.component';
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
-import { PredictedMapComponent } from './predicted-map/predicted-map.component';
 import { ServicesModule } from './services/services.module';
 import { AnomaliesComponent } from './anomalies/anomalies.component';
 
