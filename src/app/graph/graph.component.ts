@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {FormControl} from '@angular/forms';
 
-import { GraphService } from '../graph.service';
-import { empty } from 'rxjs/Observer';
-import { Journey } from '../journey';
-import { DatePipe } from '@angular/common';
+import { GraphService } from '../services/graph.service';
+import { Journey } from '../entities/journey';
 
 declare let d3: any;
 

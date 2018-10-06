@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MapService } from '../map.service';
-import { Journey } from '../journey'
+
+import { Journey } from '../entities/journey'
+import { MapService } from '../services/map.service';
 
 declare let L: any;
 @Component({

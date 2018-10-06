@@ -13,19 +13,15 @@ import { AppComponent } from './app.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { DataItemService } from './data-item.service';
-import { GraphService } from './graph.service';
 import { CustomReuseStrategy } from './custom-reuse-strategy';
 import { GraphComponent } from './graph/graph.component';
 import { MapComponent } from './map/map.component';
-import { MapService } from './map.service';
 
 // d3 and nvd3 should be included somewhere
 import 'd3';
 import 'nvd3';
-import { GlobalSharingService } from './global-sharing.service';
-import { DashboardService } from './dashboard.service';
 import { PredictedMapComponent } from './predicted-map/predicted-map.component';
+import { ServicesModule } from './services/services.module';
 
 
 const appRoutes: Routes = [
@@ -55,6 +51,7 @@ const appRoutes: Routes = [
     PredictedMapComponent
   ],
   imports: [
+    ServicesModule,
     BrowserModule,
     FormsModule,
     NvD3Module,
@@ -67,12 +64,6 @@ const appRoutes: Routes = [
     )
   ],
   providers: [
-    // D3Service,
-    DataItemService,
-    GraphService,
-    MapService,
-    DashboardService,
-    GlobalSharingService,
     DatePipe,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],

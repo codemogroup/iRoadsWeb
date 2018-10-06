@@ -1,9 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, OnInit} from '@angular/core';
 
-import { DataItem } from '../data-item';
-import { DataItemService } from '../data-item.service';
-import { AfterContentInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { DataItem } from '../entities/data-item';
+import { DataItemService } from '../services/data-item.service';
+
 
 
 @Component({

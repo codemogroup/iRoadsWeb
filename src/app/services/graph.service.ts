@@ -2,22 +2,25 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Journey } from './journey';
+import { HttpClient } from '@angular/common/http';
+
+import { Journey } from '../entities/journey';
 
 @Injectable()
-export class MapService {
-
+export class GraphService {
 
     private rootUrl = 'http://iroads.projects.mrt.ac.lk:8080/';
-    
+   
 
     private getJourneyIDsUrl = this.rootUrl + 'getJourneyNames';
-    private getLocationDataUrl = this.rootUrl + 'getLocationsByjourneyID?journeyID=';
+    private getGraphDataUrl = this.rootUrl + 'getGraph?journeyID=';
 
-    private getPredictedDataUrl ="./../assets/predictedDil.json";
+    private graphSplitByValue:number;
 
-    constructor(private http: HttpClient) { }
+
+    constructor(private http: HttpClient) {
+        this.graphSplitByValue=1000;
+     }
 
     getJourneyIDs(): Observable<Journey[]> {
         return this.http.get<Journey[]>(this.getJourneyIDsUrl).pipe(
@@ -26,18 +29,10 @@ export class MapService {
         );
     }
 
-    getLocationData(journeyID): Observable<Object[]> {
-        return this.http.get<Object[]>(this.getLocationDataUrl + journeyID).pipe(
-            tap(dataItems => console.log(`location data fetched`)),
-            catchError(this.handleError('getLocationData', []))
-        );
-    }
-
-
-    getPredictedData(): Observable<Object[]> {
-        return this.http.get<Object[]>(this.getPredictedDataUrl ).pipe(
-            tap(dataItems => console.log(`predicted data fetched`)),
-            catchError(this.handleError('getPredictedData', []))
+    getGraphData(journeyID): Observable<Object[]> {
+        return this.http.get<Object[]>(this.getGraphDataUrl + journeyID+"&splitBy=" + this.graphSplitByValue).pipe(
+            tap(dataItems => console.log(`graph data fetched`)),
+            catchError(this.handleError('getGraphData', []))
         );
     }
 

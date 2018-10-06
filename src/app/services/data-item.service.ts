@@ -2,16 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import { DataItem } from './data-item';
-import { window } from 'rxjs/operators/window';
+import { DataItem } from '../entities/data-item';
 
 @Injectable()
 export class DataItemService {
 
   private rootUrl = 'http://iroads.projects.mrt.ac.lk:8080';
-  private rootUrlHeroku = 'https://iroadsrest.herokuapp.com';
 
   private getAllDataUrl = this.rootUrl + '/getAll';
 
