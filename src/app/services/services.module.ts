@@ -5,6 +5,7 @@ import { MapService } from './map.service';
 import { DataItemService } from './data-item.service';
 import { GraphService } from './graph.service';
 import { DashboardService } from './dashboard.service';
+import { UploadService } from './upload.service';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { DashboardService } from './dashboard.service';
     MapService,
     DataItemService,
     GraphService,
-    DashboardService
+    DashboardService,
+    UploadService
   ]
 })
 export class ServicesModule { }

@@ -1,0 +1,59 @@
+<!-- [hidden]="!selectedID"  -->
+<div style="width: 100%;margin-top: 200px" id="uploadSection">
+  <div style="width:600px;margin: auto;" class="input-group">
+
+    <div style="width: 100%;" class="row">
+      <div class="col-6 ">
+        <label class="file-upload btn btn-primary">
+          Browse for file ... <input style="display:none" type="file" (change)="fileChange($event)" accept=".json" />
+        </label>
+      </div>
+      <div class="col-6 ">
+        <label class="col-6" for="inputGroupFile01"><span *ngIf="filename">{{filename}}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- *ngIf="filename" -->
+    <div style="margin-top: 15px" class="input-group">
+      <div style="width: 100%;" class="input-group row">
+        <!-- <label for="predictionName" class="col-sm-5 col-form-label">Prediction name: </label> -->
+        <div class="input-group col-6">
+          <input list="groups" required [(ngModel)]="predictionGroup" name="predictionGroup" type="text" class="form-control" id="predictionGroup"
+            placeholder="Prediction Group">
+          <datalist id="groups">
+            <option *ngFor="let name of groupIds" value={{name.predictionGroup}}>
+          </datalist>
+        </div>
+        <div [hidden]="!loadingGroups" class="col-1 loaderId">
+            <!-- <label for=""></label> -->
+            <div class="loadingIcon">
+              <img width="37" style="
+              margin-left: auto;
+              margin-top: 0px;
+              margin-right: auto;" src="./../assets/preloader.gif" alt="">
+              <p style="text-align:center;display: inline"></p>
+            </div>
+          </div>  
+        <div class="input-group col-5">
+          <input required [(ngModel)]="subName" name="subName" type="text" class="form-control" id="subName" placeholder="Sub Name">
+        </div>
+      </div>
+
+      <div class="input-group" style="margin-top: 15px;margin-left: 445px;">
+        <button type="submit" class="btn btn-outline-primary" (click)="submitFile()">Submit</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<div [hidden]="!uploading" class="loader">
+  <div class="loadingIcon">
+    <p style="text-align:center">Uploading File...</p>
+    <img width="70" style="display: block;
+      margin-left: auto;
+      margin-right: auto;" src="./../assets/preloader.gif" alt="">
+  </div>
+</div>

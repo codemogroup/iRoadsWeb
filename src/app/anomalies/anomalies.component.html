@@ -1,31 +1,79 @@
-<div style="height: 10vh; margin-left: 10px" class="container row selectionArea">
 
-  <div style="margin:10px 0px; width:100%;padding-right: 70px">
-    <div style="display: inline;float:right;color: blue"  class="custom-control custom-checkbox my-1 mr-sm-2">
-      <input type="checkbox" class="custom-control-input" id="taggedAnomalies"
-      [checked]="taggedCheckBox"
-      (change)="taggedCheckBoxChanged()"
-      >
-      <label class="custom-control-label" for="taggedAnomalies">Tagged Anomalies</label>
-    </div>
+<div style="height: 10vh; margin-left: 25px" class="container row selectionArea">
+  <div class="col-11">
 
-    <div style="display: inline;float:right;color: red" class="custom-control custom-checkbox my-1 mr-sm-2">
-      <input type="checkbox" class="custom-control-input" id="predictedAnomalies"
-      [checked]="predictedCheckBox"
-      (change)="predictedCheckBoxChanged()"
-      >
-      <label class="custom-control-label" for="predictedAnomalies">Predicted Anomalies</label>
-    </div>
+    <ngx-select placeholder="Select Prediction Group" optionValueField="predictionGroup" optionTextField="predictionGroup" style="width: 90%;display: inline-block;"
+      [items]="groupIds" (select)="selectGroupId()" [(ngModel)]="selectedGroupId">
+      <ng-template ngx-select-option let-option let-text="text">
+        <div style="padding:10px"> <span class="title">
+            <span class="name"> {{option.data.predictionGroup}} </span>
+          </span>
+
+        </div>
+      </ng-template>
+    </ngx-select>
+    <span style="float:right;width: 9%" class="input-group-btn">
+      <button class="btn btn-outline-primary" type="button" tabindex="-1" (click)="refreshIDs()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </span>
+    <!-- </div> -->
   </div>
-
-  <div [hidden]="!loadingAnomalyData" class="loader">
+  <div [hidden]="!loadingPredictionGroups" class="col-1 loaderId">
+    <!-- <label for=""></label> -->
     <div class="loadingIcon">
-      <p style="text-align:center">Loading Anomalies...</p>
-      <img width="70" style="display: block;
+      <img width="37" style="
       margin-left: auto;
+      margin-top: 0px;
       margin-right: auto;" src="./../assets/preloader.gif" alt="">
+      <p style="text-align:center;display: inline"></p>
     </div>
   </div>
+</div>
 
-  <div id="mapid" style="height: 77vh; width: 100%;"> </div>
+
+
+<div [hidden]="!loadingAnomalyData" class="loader">
+  <div class="loadingIcon">
+    <p style="text-align:center">Loading Data...</p>
+    <img width="70" style="display: block;
+    margin-left: auto;
+    margin-right: auto;" src="./../assets/preloader.gif" alt="">
+  </div>
+</div>
+<div class="row" style="margin-right: 0px;margin-left: 7px">
+  <div class="col col-10" id="mapid" style="height: 75vh; width: 100%;border-radius: 8px;border:2px solid #009BF6"> </div>
+  <div class="col col-2" id="" style="padding-left: 10px; height: 75vh; width: 100%;">
+
+    <div style="padding:5px;height: 75vh; width: 100%;border-radius: 8px;border:2px solid #009BF6;font-size: 12px">
+      <div >
+
+        <div style="margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
+
+          <div style="" class="custom-control custom-radio my-1 mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="taggedCheckBox" (change)="taggedCheckBoxChanged($event)">
+            <label class="custom-control-label" for="taggedCheckBox">Tagged Points</label>
+          </div>
+        </div>
+
+        <div [hidden]="!predictedData" style="margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
+          <div *ngFor="let p of predictedData;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="{{i}}" (change)="predictedCheckBoxChanged($event,i)">
+            <label class="custom-control-label" for="{{i}}">{{p["subName"]}}</label>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;margin-left: 10px">
+          <label for="focusCheck">Auto focus </label>
+          <div style="margin-top: 0px">
+            <ui-switch id="focusCheck" [(ngModel)]="enableAutoFocus" color="#009BF6" switchColor="white" size="small" ></ui-switch>
+          </div>
+        </div>
+      </div>
+
+      <div id="segmentDataSection">
+
+      </div>
+    </div>
+  </div>
 </div>

@@ -4,6 +4,7 @@ import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Journey } from '../entities/journey';
+import { SegmentWrapper } from '../entities/segment-wrapper';
 
 @Injectable()
 export class MapService {
@@ -15,7 +16,12 @@ export class MapService {
     private getJourneyIDsUrl = this.rootUrl + 'getJourneyNames';
     private getLocationDataUrl = this.rootUrl + 'getLocationsByjourneyID?journeyID=';
 
-    private getPredictedDataUrl ="./../assets/predictedDil.json";
+    private getJourneySegmentsUrl=this.rootUrl+'getJourneySegments?journeyID=';
+
+    // private getPredictedDataUrl ="./../assets/predictedDil.json";
+    private getPredictedDataUrl =this.rootUrl+'getPredictionsByGroup?groupID=';
+    
+    // private getJourneySegmentsDataUrl ="./../assets/JourneySegments.json";
 
     private getTaggedDataUrl =this.rootUrl+'getAllTags';
 
@@ -36,12 +42,20 @@ export class MapService {
     }
 
 
-    getPredictedData(): Observable<Object[]> {
-        return this.http.get<Object[]>(this.getPredictedDataUrl ).pipe(
-            tap(dataItems => console.log(`predicted data fetched`)),
+    getPredictedData(groupId): Observable<Object[]> {
+        return this.http.get<Object[]>(this.getPredictedDataUrl+groupId).pipe(
+            tap(data => console.log(`predicted data fetched`)),
             catchError(this.handleError('getPredictedData', []))
         );
     }
+
+    // getPredictedDataDemo(groupId): Observable<Object[]> {
+    //     return this.http.get<Object[]>("./../assets/getPredictionsByGroup.json").pipe(
+    //         tap(data => console.log(`predicted data fetched`)),
+    //         catchError(this.handleError('getPredictedData', []))
+    //     );
+    // }
+
 
     getTaggedData():Observable<Object[]> {
         return this.http.get<Object[]>(this.getTaggedDataUrl ).pipe(
@@ -49,6 +63,20 @@ export class MapService {
             catchError(this.handleError('getTaggedData', []))
         );
     }
+
+    getJourneySegments(jid,lat,lon):Observable<SegmentWrapper> {
+        return this.http.get<SegmentWrapper>(this.getJourneySegmentsUrl+jid+"&lat="+lat+"&lon="+lon).pipe(
+            tap(segmendata => console.log('segment data fetched')),
+            catchError(this.handleError('getJourneySegments', []))
+        );
+    }
+
+    // getJourneySegmentsDummy():Observable<SegmentWrapper> {
+    //     return this.http.get<SegmentWrapper>(this.getJourneySegmentsDataUrl+).pipe(
+    //         tap(segmendata => console.log('segment data fetched')),
+    //         catchError(this.handleError('getJourneySegments', []))
+    //     );
+    // }
 
 
     private handleError<T>(operation = 'operation', result?: T) {
