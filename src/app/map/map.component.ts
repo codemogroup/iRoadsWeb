@@ -75,23 +75,6 @@ export class MapComponent implements OnInit, AfterViewInit {
             accessToken: 'pk.eyJ1IjoiY29kZW1vIiwiYSI6ImNqaWFuNDh2aTE5M2Mza3J4YWd6MWoxNmwifQ.Dp5h88FvHAfAHaSRl508jQ'
         }).addTo(this.mymap);
 
-        var map = this.mymap;
-
-        var element_ref = this.elementRef;
-        // this.mymap.on('click', function (e) {
-
-        //     var popup = L.popup();
-        //     var content =
-        //         '<div style="overflow:hidden">' + e.latlng.lat + "," + e.latlng.lng + '<br>'
-        //         + '<div/>';
-        //     popup.setLatLng(e.latlng)
-        //         .setContent(content)
-        //         .openOn(map);
-        //     // add event listener to newly added a.merch-link element
-
-
-        // });
-
     }
 
     getJourneyIDs(): void {
