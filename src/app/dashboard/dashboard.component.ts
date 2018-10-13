@@ -10,7 +10,7 @@ import { SummaryObj } from '../entities/summary-obj';
 export class DashboardComponent implements OnInit {
 
 
-  public summary:SummaryObj;
+  public summary:any;
 
   constructor(private dashboardService:DashboardService) { }
 

@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { NvD3Module } from 'ng2-nvd3';
-import { HttpModule } from '@angular/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { NgxSelectModule  } from 'ngx-select-ex';
 import { UiSwitchModule } from 'ngx-toggle-switch';
@@ -60,7 +59,6 @@ const appRoutes: Routes = [
     FormsModule,
     NvD3Module,
     HttpClientModule,
-    HttpModule,
     NgxSelectModule,
     UiSwitchModule,
     RouterModule.forRoot(

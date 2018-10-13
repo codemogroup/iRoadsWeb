@@ -28,7 +28,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     mymap;
     segmentLayerGroup;
 
-    segmentData: SegmentWrapper;
+    segmentData: any;
     loadingSegmentData: boolean;
     noSegmentData: boolean;
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 import { GraphService } from '../services/graph.service';
 import { Journey } from '../entities/journey';
@@ -24,13 +24,13 @@ export class GraphComponent implements OnInit {
     public graphData: Object[];
 
     public graphDataPart: Object;
-    private part:number;
-    private partLimit:number;
-    public disablePrevious:boolean;
-    public disableNext:boolean;
+    private part: number;
+    private partLimit: number;
+    public disablePrevious: boolean;
+    public disableNext: boolean;
 
-    public graphPart:string;
-    private noOfParts:number;
+    public graphPart: string;
+    private noOfParts: number;
 
     public journeyIDs: Journey[];
     public selectedID;
@@ -44,11 +44,11 @@ export class GraphComponent implements OnInit {
 
     constructor(private graphDataService: GraphService) {
 
-        this.disablePrevious=true;
-        this.disableNext=true;
+        this.disablePrevious = true;
+        this.disableNext = true;
 
-        this.part=0;
-        this.partLimit=1000000;
+        this.part = 0;
+        this.partLimit = 1000000;
         this.loadingGraphData = false;
         this.noGraphData = true;
 
@@ -93,52 +93,58 @@ export class GraphComponent implements OnInit {
         this.graphDataService.getGraphData(journeyID)
             .subscribe(data => {
                 console.log(data.length)
-                this.noOfParts=data.length;
-                this.part=0;
-                this.disableNext=false;
-                this.disablePrevious=true;
+                this.noOfParts = data.length;
 
-                this.loaded=true;
+                this.part = 0;
+                this.disableNext = false;
+                this.disablePrevious = true;
+
+                this.loaded = true;
 
                 this.graphData = data;
                 this.loadingGraphData = false;
                 this.noGraphData = false;
                 this.loadGraphPartByPart();
-                this.graphPart=this.part+1+"/"+this.noOfParts;
+                this.graphPart = this.part + 1 + "/" + this.noOfParts;
+
+                if (this.noOfParts == 1) {
+                    this.disableNext=true;
+                    this.disablePrevious=true;
+                }
             });
 
     }
 
-    nextPart(){
+    nextPart() {
         this.part++;
         this.loadGraphPartByPart();
-        if(this.part>0){
-            this.disablePrevious=false;
+        if (this.part > 0) {
+            this.disablePrevious = false;
         }
-        if(this.graphData.length==this.part+1){
-            this.disableNext=true;
+        if (this.graphData.length == this.part + 1) {
+            this.disableNext = true;
         }
-        this.graphPart=this.part+1+"/"+this.noOfParts;
-        console.log("part:"+this.part)
+        this.graphPart = this.part + 1 + "/" + this.noOfParts;
+        console.log("part:" + this.part)
     }
 
-    previousPart(){
-        if(this.part>0){
+    previousPart() {
+        if (this.part > 0) {
             this.part--;
             this.loadGraphPartByPart()
-            this.disableNext=false;
-            if(this.part==0){
-                this.disablePrevious=true;
+            this.disableNext = false;
+            if (this.part == 0) {
+                this.disablePrevious = true;
             }
-        }else{
-            this.disablePrevious=true;
+        } else {
+            this.disablePrevious = true;
         }
-        this.graphPart=this.part+1+"/"+this.noOfParts;
-        console.log("part:"+this.part)
+        this.graphPart = this.part + 1 + "/" + this.noOfParts;
+        console.log("part:" + this.part)
     }
 
-    loadGraphPartByPart(){
-        this.graphDataPart=this.graphData[this.part];
+    loadGraphPartByPart() {
+        this.graphDataPart = this.graphData[this.part];
         this.setGraphConfig();
     }
 
