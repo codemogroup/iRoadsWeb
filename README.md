@@ -1,4 +1,4 @@
 # Iroads
 
-https://iroads.projects.mrt.ac.lk/
+http://iroads.projects.mrt.ac.lk/
 
