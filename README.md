@@ -1,7 +1,4 @@
 # Iroads
 
-
-
-Automatically deploying server
-https://iroads.herokuapp.com/
+https://iroads.projects.mrt.ac.lk/
 
