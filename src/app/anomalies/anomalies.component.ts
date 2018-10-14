@@ -52,14 +52,13 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getGroupIds();
     this.getTaggedData();
-    this.configureMap();
 
   }
 
-  // ngAfterViewInit(): void {
-  //   this.configureMap();
+  ngAfterViewInit(): void {
+    this.configureMap();
 
-  // }
+  }
 
   configureMap(): void {
     this.mymap = L.map('mapid', { preferCanvas: true }).setView([6.799212, 79.901183], 15);
