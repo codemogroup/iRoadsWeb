@@ -28,6 +28,7 @@
     "core-js": "^2.4.1",
     "jquery": "^3.3.1",
     "leaflet": "^1.3.1",
+    "leaflet-routing-machine": "^3.2.12",
     "ng-selectize": "^1.1.3",
     "ng2-nvd3": "^2.0.0",
     "ngx-select-ex": "^3.5.2-ng4",
@@ -56,7 +57,7 @@
     "protractor": "^5.4.1",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "^2.4.2"
+    "typescript": "^2.0.2"
   },
   "engines": {
     "node": "6.10.3",

@@ -23,6 +23,7 @@ import 'nvd3';
 import { ServicesModule } from './services/services.module';
 import { AnomaliesComponent } from './anomalies/anomalies.component';
 import { UploadPredictionComponent } from './upload-prediction/upload-prediction.component';
+import { RouteViewComponent } from './route-view/route-view.component';
 
 
 const appRoutes: Routes = [
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'graph', component: GraphComponent },
   { path: 'journeyMap', component: MapComponent },
+  { path: 'routeMap', component: RouteViewComponent },
   { path: 'predictedMap', component: AnomaliesComponent },
   { path: 'uploadPrediction', component: UploadPredictionComponent },
   {
@@ -51,7 +53,8 @@ const appRoutes: Routes = [
     GraphComponent,
     MapComponent,
     AnomaliesComponent,
-    UploadPredictionComponent
+    UploadPredictionComponent,
+    RouteViewComponent
   ],
   imports: [
     ServicesModule,
