@@ -51,24 +51,29 @@
         <div style="margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
 
           <div style="" class="custom-control custom-radio my-1 mr-sm-2">
-            <input type="checkbox" class="custom-control-input" id="taggedCheckBox" (change)="taggedCheckBoxChanged($event)">
+            <input  [(ngModel)]="taggedcheckbox"  type="checkbox" class="custom-control-input" id="taggedCheckBox" (change)="taggedCheckBoxChanged($event)">
             <label class="custom-control-label" for="taggedCheckBox">Tagged Points</label>
           </div>
         </div>
 
-        <div [hidden]="!predictedData" style="margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
-          <div *ngFor="let p of predictedData;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
-            <input type="checkbox" class="custom-control-input" id="{{i}}" (change)="predictedCheckBoxChanged($event,i)">
+        <div [hidden]="!predictedData" style="overflow-y: auto;height: 350px; margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
+          <div *ngFor="let p of predictedDataShowning;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
+            <input #checkboxes type="checkbox" class="custom-control-input" id="{{i}}" (change)="predictedCheckBoxChanged($event,i)">
             <label class="custom-control-label" for="{{i}}">{{p["subName"]}}</label>
           </div>
         </div>
 
-        <div style="margin-top: 20px;margin-left: 10px">
+        <div style="margin-top: 20px;margin-left: 10px;display: inline-block;">
           <label for="focusCheck">Auto focus </label>
           <div style="margin-top: 0px">
             <ui-switch id="focusCheck" [(ngModel)]="enableAutoFocus" color="#009BF6" switchColor="white" size="small" ></ui-switch>
           </div>
         </div>
+
+        <div  style="float: right;margin-top: 35px;margin-right: 5px;">
+          <button  class="btn btn-outline-primary" type="button" (click)=clearAll()>Clear All</button>
+        </div>
+
       </div>
 
       <div id="segmentDataSection">

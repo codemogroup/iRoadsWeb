@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { MapService } from '../services/map.service';
 import { UploadService } from '../services/upload.service';
 import { UiSwitchModule } from 'ngx-toggle-switch';
@@ -19,6 +19,8 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
 
   public predictedData: Object[];
 
+  public predictedDataShowning: Object[];
+
   public taggedData: any;
   public taggedDataShowing: any;
 
@@ -36,9 +38,10 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   polyline;
   mymap;
 
-  enableAutoFocus=true;
+  enableAutoFocus = true;
+  allcheckboxes;
 
-  feathureGroups = new Object();
+  feathureGroups: any[] = new Array;
 
   public taggedGroup;
 
@@ -49,13 +52,14 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getGroupIds();
     this.getTaggedData();
-
-  }
-
-  ngAfterViewInit(): void {
     this.configureMap();
 
   }
+
+  // ngAfterViewInit(): void {
+  //   this.configureMap();
+
+  // }
 
   configureMap(): void {
     this.mymap = L.map('mapid', { preferCanvas: true }).setView([6.799212, 79.901183], 15);
@@ -83,7 +87,10 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   }
 
   selectGroupId() {
-    console.log('selected journey ID = ' + this.selectedGroupId);
+    console.log('selected group ID = ' + this.selectedGroupId);
+
+    this.removeAllLayers();
+
     if (this.selectedGroupId === 'select') {
       this.selectedGroupId = null;
     } else {
@@ -101,6 +108,7 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
       .subscribe(data => {
         this.predictedData = data;
         this.loadingAnomalyData = false;
+        this.predictedDataShowning=this.predictedData;
       });
   }
 
@@ -134,11 +142,17 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   predictedCheckBoxChanged(event, index) {
     var checked = event.target.checked;
     if (checked) { //check true
+
+      if(this.predictedDataShowning){
+        this.predictedDataShowning=this.predictedData;
+      }
+
       if (this.feathureGroups[index]) {//there is the layerGroup
         var layerGroup = this.feathureGroups[index]; //get layer from dictionary
         this.addLayerToMap(layerGroup);
+
       } else {//there is no layer for index
-        var data = this.predictedData[index]['data'];
+        var data = this.predictedDataShowning[index]['data'];
         var layerGroup = L.featureGroup();
         layerGroup = this.addPointsToLayer(data, layerGroup, 'red')//adding points to layerGroup
 
@@ -176,6 +190,30 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
     this.mymap.removeLayer(layerGroup)
   }
 
+  removeAllLayers() {
+    if (this.feathureGroups) {
+      this.feathureGroups.forEach(layerGroup => {
+        this.mymap.removeLayer(layerGroup)
+      });
+    }
+  }
+
+  @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
+  taggedcheckbox;
+
+  clearAll() {
+    this.removeAllLayers();
+    if (this.taggedGroup) {
+      this.mymap.removeLayer(this.taggedGroup)
+    }
+
+    this.checkboxes.forEach((element) => {
+      element.nativeElement.checked = false;
+    });
+
+    this.taggedcheckbox=false;
+    
+  }
 
 
   // id selection box
