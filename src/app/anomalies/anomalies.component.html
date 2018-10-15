@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <div [hidden]="!predictedData" style="overflow-y: auto;height: 350px; margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
+        <div [hidden]="!predictedData" style="overflow-y: auto;height: 330px; margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
           <div *ngFor="let p of predictedDataShowning;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
             <input #checkboxes type="checkbox" class="custom-control-input" id="{{i}}" (change)="predictedCheckBoxChanged($event,i)">
             <label class="custom-control-label" for="{{i}}">{{p["subName"]}}</label>
