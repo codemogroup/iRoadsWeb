@@ -311,9 +311,9 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     chooseColor(thisavg, allmin, allmax) {
         // todo implement this
-        var color1 = "#F9EBEA";
-        var color2 = "#E6B0AA";
-        var color3 = "#CD6155";
+        var color1 = "#F5EE04";
+        var color2 = "#F7960A";
+        var color3 = "#DF2C2C";
         var color4 = "#A93226";
         var color5 = "#7B241C";
 
