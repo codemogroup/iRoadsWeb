@@ -64,8 +64,8 @@ export class MapService {
         );
     }
 
-    getJourneySegments(jid,lat,lon):Observable<SegmentWrapper[]> {
-        return this.http.get<SegmentWrapper[]>(this.getJourneySegmentsUrl+jid+"&lat="+lat+"&lon="+lon).pipe(
+    getJourneySegments(jid,lat,lon,threshold):Observable<SegmentWrapper[]> {
+        return this.http.get<SegmentWrapper[]>(this.getJourneySegmentsUrl+jid+"&lat="+lat+"&lon="+lon+"&threshold="+threshold).pipe(
             tap(segmendata => console.log('segment data fetched')),
             catchError(this.handleError('getJourneySegments', []))
         );

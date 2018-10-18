@@ -24,6 +24,10 @@ export class SegmentWrapper {
     minAvgRmsAccel:number;
     maxAvgRmsAccel:number;
 
+    minAboveThresholdPerMeter;
+    maxAboveThresholdPerMeter;
+    
+
 
     
 }

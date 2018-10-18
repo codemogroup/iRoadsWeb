@@ -39,6 +39,8 @@ export class MapComponent implements OnInit, AfterViewInit {
     metadata_no_of_segments_full;
     metadata_colorcodes;
 
+    threshold;
+
     constructor(private mapService: MapService, private elementRef: ElementRef) {
         this.metadata_journey_starttime_full = 0;
         this.metadata_journey_endtime_full = 0;
@@ -141,8 +143,12 @@ export class MapComponent implements OnInit, AfterViewInit {
     addClickablePopup(e) {
         var popup = L.popup();
         var content =
-            '<div style="overflow:hidden">' + e.latlng.lat + "," + e.latlng.lng + '<br>'
+            '<div style="overflow:hidden">'
             + '<div class="">'
+            + '<div class="row" style="padding:3px;padding-right:17px;">'
+            + '<label class=" col-6"><b>Threhold aY</b></label>'
+            + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=2.0>'
+            + '</div>'
             + '<button style="" class="startpointbutton btn .btn-success" lat="' + e.latlng.lat + '" lon="' + e.latlng.lng + '">'
             + 'start segmentation from here</button>'
             + '</div>'
@@ -154,12 +160,16 @@ export class MapComponent implements OnInit, AfterViewInit {
 
         // add event listener to newly added a.merch-link element
         var startpointbutton = this.elementRef.nativeElement.querySelector(".startpointbutton");
+        var inputbox = this.elementRef.nativeElement.querySelector(".inputbox");
         if (startpointbutton) {
-            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e));
+
+            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e, inputbox.value));
         }
     }
 
-    segmentRequest(event): void {
+    segmentRequest(event, threshold): void {
+
+        console.log("threshold:" + threshold)
 
         // get id from attribute
         var lat = event.target.getAttribute("lat");
@@ -170,7 +180,7 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.loadingSegmentData = true;
         this.loadingData = true;
 
-        this.mapService.getJourneySegments(this.selectedID, lat, lon)
+        this.mapService.getJourneySegments(this.selectedID, lat, lon,threshold)
             .subscribe(data => {
                 this.loadingData = false;
                 this.segmentData = data;
@@ -219,10 +229,13 @@ export class MapComponent implements OnInit, AfterViewInit {
             case "avgRmsAccel":
                 this.addSegmentsToMap("avgRmsAccel")
                 break;
+            case "thresholdAy":
+                this.addSegmentsToMap("thresholdAy")
+                break;
         }
     }
 
-    
+
 
     addSegmentsToMap(colorBy): void {
         if (this.polyline) {
@@ -287,6 +300,9 @@ export class MapComponent implements OnInit, AfterViewInit {
             case "avgRmsAccel":
                 color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel);
                 break;
+            case "thresholdAy":
+                color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter);
+                break;
         }
         return color;
     }
@@ -300,6 +316,8 @@ export class MapComponent implements OnInit, AfterViewInit {
             + '<span><b> Average speed = </b>' + segmentInfo.avgSpeed.toFixed(2) + ' km/h</span><br>'
             + '<span><b> Average accelY = </b>' + segmentInfo.avgAccelY.toFixed(4) + ' m/s2</span><br>'
             + '<span><b> Average rms accel = </b>' + segmentInfo.avgRmsAccel.toFixed(4) + ' m/s2</span><br>'
+            + '<span><b> Above threshold = </b>' + segmentInfo.aboveThresholdPerMeter.toFixed(4) + ' per meter</span><br>'
+            + '<span><b> Above threshold count= </b>' + segmentInfo.aboveThreshold + ' </span><br>'
             + '<span><b> SD full mean accelY = </b>' + segmentInfo.standardDeviationFullMeanAccelY.toFixed(4) + '</span><br>'
             + '<span><b> SD segment mean accelY = </b>' + segmentInfo.standardDeviationSegmentMeanAccelY.toFixed(4) + '</span><br>'
             + '</div>'
@@ -311,11 +329,11 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     chooseColor(thisavg, allmin, allmax) {
         // todo implement this
-        var color1 = "#F5EE04";
-        var color2 = "#F7960A";
+        var color5 = "#F5EE04";
+        var color4 = "#F7960A";
         var color3 = "#DF2C2C";
-        var color4 = "#A93226";
-        var color5 = "#7B241C";
+        var color2 = "#A93226";
+        var color1 = "#7B241C";
 
         var colors = [color1, color2, color3, color4, color5];
         var range = allmax - allmin;
@@ -323,10 +341,11 @@ export class MapComponent implements OnInit, AfterViewInit {
 
         var colorIndex = Math.floor(thisavg / rangePart);
 
+        if(colorIndex==colors.length){
+            colorIndex--;
+        }
 
         var color = colors[colorIndex];
-
-        this.metadata_colorcodes += '<span class="dot" style="background-color:"' + color + '"">';
 
         //refresh color codes by last used type (avgspeed,vertical movement)
         if (this.colorCodes.length == 0) {
