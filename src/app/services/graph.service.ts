@@ -19,7 +19,7 @@ export class GraphService {
 
 
     constructor(private http: HttpClient) {
-        this.graphSplitByValue=1000;
+        this.graphSplitByValue=60;
      }
 
     getJourneyIDs(): Observable<Journey[]> {
