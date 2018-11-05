@@ -23,7 +23,10 @@ export class GraphComponent implements OnInit {
     public options;
     public graphData: Object[];
 
-    public graphDataPart: Object;
+    public graphDataPart: any;
+    public dataItemDensityOfPart:number;
+    public graphDataPartObj:any;
+
     private part: number;
     private partLimit: number;
     public disablePrevious: boolean;
@@ -144,7 +147,10 @@ export class GraphComponent implements OnInit {
     }
 
     loadGraphPartByPart() {
-        this.graphDataPart = this.graphData[this.part];
+        this.graphDataPartObj = this.graphData[this.part];
+        this.graphDataPart = this.graphDataPartObj.values;
+        this.dataItemDensityOfPart= this.graphDataPartObj.dataItemDensity;
+        console.log("part length:"+this.dataItemDensityOfPart);
         this.setGraphConfig();
     }
 
@@ -163,14 +169,14 @@ export class GraphComponent implements OnInit {
                 },
                 transitionDuration: 500,
                 xAxis: {
-                    axisLabel: 'time (ms)',
+                    axisLabel: 'time (s)',
                     tickFormat: function (d) {
-                        return d3.format(',f')(d);
+                        return d3.format(',f')(d/1000);
                     }
                 },
                 x2Axis: {
                     tickFormat: function (d) {
-                        return d3.format(',f')(d);
+                        return d3.format(',f')(d/1000);
                     }
                 },
                 yAxis: {

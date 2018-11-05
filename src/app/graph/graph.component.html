@@ -56,8 +56,9 @@
       </button>
     </div>
 
-    <div style="margin:0 auto;width:100px">
+    <div *ngIf="graphDataPart"  style="margin:0 auto;width:300px">
       <span> <b>Graph {{graphPart}}</b></span>
+      <span> <b> - Point count: {{dataItemDensityOfPart}}</b></span>
     </div>
 </div>
 </div>
