@@ -5,6 +5,7 @@ import { GraphService } from '../services/graph.service';
 import { Journey } from '../entities/journey';
 
 declare let d3: any;
+declare let L: any;
 
 
 @Component({
@@ -43,6 +44,10 @@ export class GraphComponent implements OnInit {
     noGraphData;
     loaded;
 
+
+    polyline;
+    mymap;
+
     public selectControl = new FormControl();
 
     constructor(private graphDataService: GraphService) {
@@ -66,6 +71,42 @@ export class GraphComponent implements OnInit {
         this.selectedID = 'select';
     }
 
+    ngAfterViewInit(): void {
+
+        this.configureMap();
+
+    }
+
+    configureMap(): void {
+        this.mymap = L.map('mapid', { preferCanvas: true }).setView([6.799212, 79.901183], 15);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: '',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoiY29kZW1vIiwiYSI6ImNqaWFuNDh2aTE5M2Mza3J4YWd6MWoxNmwifQ.Dp5h88FvHAfAHaSRl508jQ'
+        }).addTo(this.mymap);
+
+    }
+
+    addLocationsToMap(): void {
+        if (this.polyline) {
+            this.mymap.removeLayer(this.polyline);
+        }
+        this.polyline = L.polyline(this.graphDataPartObj.gps, {
+
+            color: 'blue',
+            weight: 7,
+            opacity: 0.5,
+            smoothFactor: 1,
+
+        })
+            .addTo(this.mymap);
+        this.mymap.fitBounds(this.polyline.getBounds());
+        var map = this.mymap;
+
+        // this.polyline.on('click', (e) => this.addClickablePopup(e));
+    }
 
     selectID(): void {
         console.log('selected journey ID = ' + this.selectedID);
@@ -152,6 +193,7 @@ export class GraphComponent implements OnInit {
         this.dataItemDensityOfPart= this.graphDataPartObj.dataItemDensity;
         console.log("part length:"+this.dataItemDensityOfPart);
         this.setGraphConfig();
+        this.addLocationsToMap();
     }
 
 

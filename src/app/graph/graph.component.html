@@ -1,8 +1,8 @@
 <div style="height: 10vh; margin-left: 25px" class="container row selectionArea">
   <div class="col-11">
 
-    <ngx-select placeholder="Select Journey Name" optionValueField="journeyID" optionTextField="journeyName" style="width: 90%;display: inline-block;" [items]="journeyIDs"
-      (select)="selectID()" [(ngModel)]="selectedID">
+    <ngx-select placeholder="Select Journey Name" optionValueField="journeyID" optionTextField="journeyName" style="width: 90%;display: inline-block;"
+      [items]="journeyIDs" (select)="selectID()" [(ngModel)]="selectedID">
       <ng-template ngx-select-option let-option let-text="text">
         <div style="padding:10px"> <span class="title">
             <span class="name"> {{option.data.journeyName}} </span>
@@ -27,7 +27,7 @@
       margin-right: auto;" src="./../assets/preloader.gif" alt="">
       <p style="text-align:center;display: inline"></p>
     </div>
-  </div>  
+  </div>
 </div>
 
 <div [hidden]="!loadingGraphData" class="loader">
@@ -38,13 +38,18 @@
     margin-right: auto;" src="./../assets/preloader.gif" alt="">
   </div>
 </div>
-<div class="container ">
-  <div class="graph">
+<div class="row" style="padding-left: 10px;padding-right: 10px;width: 100%">
+  <div class="graph col-9">
     <nvd3 [options]="options" [data]="graphDataPart"></nvd3>
+  </div >
+
+  <div  class="graph col-3">
+    <div class="" id="mapid" style="height: 67vh; width: 100%;border-radius: 8px;border:2px solid #009BF6"> </div>
   </div>
+
   <div style="width:100%; margin-top: 15px" [hidden]="!loaded">
 
-    <div style="float:left;width:100px;"  class="input-group-btn">
+    <div style="float:left;width:100px;" class="input-group-btn">
       <button [disabled]="disablePrevious" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="previousPart()">
         <i class="fas fa-step-backward"></i> prev
       </button>
@@ -52,13 +57,13 @@
 
     <div style="float:right;width:100px; " class="input-group-btn">
       <button [disabled]="disableNext" style="width:120px" class="btn btn-outline-primary" type="button" tabindex="-1" (click)="nextPart()">
-       next <i class="fas fa-step-forward"></i>
+        next <i class="fas fa-step-forward"></i>
       </button>
     </div>
 
-    <div *ngIf="graphDataPart"  style="margin:0 auto;width:300px">
+    <div *ngIf="graphDataPart" style="margin:0 auto;width:300px">
       <span> <b>Graph {{graphPart}}</b></span>
       <span> <b> - Point count: {{dataItemDensityOfPart}}</b></span>
     </div>
-</div>
+  </div>
 </div>
