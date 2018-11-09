@@ -26,8 +26,9 @@ export class SegmentWrapper {
 
     minAboveThresholdPerMeter;
     maxAboveThresholdPerMeter;
-    
 
+    minIri;
+    maxIri;
 
     
 }

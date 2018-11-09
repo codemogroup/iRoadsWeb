@@ -12,6 +12,7 @@ export class SegmentInfo {
     standardDeviationFullMeanAccelY:number;
     standardDeviationSegmentMeanAccelY:number;
     avgRmsAccel:number;
+    iri:number;
     
     aboveThreshold:number;
     aboveThresholdPerMeter:number;

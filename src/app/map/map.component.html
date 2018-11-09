@@ -63,8 +63,14 @@
         </div>
 
         <div style="margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
+          
           <div style="" class="custom-control custom-radio my-1 mr-sm-2">
-            <input name="radiogroup" type="radio" class="custom-control-input" id="avgSpeed" checked="checked" (change)="radioBtn('avgSpeed')">
+            <input name="radiogroup" type="radio" class="custom-control-input" id="iri" checked="checked" (change)="radioBtn('iri')">
+            <label class="custom-control-label" for="iri">IRI</label>
+          </div>
+          
+          <div style="" class="custom-control custom-radio my-1 mr-sm-2">
+            <input name="radiogroup" type="radio" class="custom-control-input" id="avgSpeed" (change)="radioBtn('avgSpeed')">
             <label class="custom-control-label" for="avgSpeed">Avg Speed</label>
           </div>
 

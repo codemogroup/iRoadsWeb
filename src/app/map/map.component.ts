@@ -148,6 +148,12 @@ export class MapComponent implements OnInit, AfterViewInit {
             + '<div class="row" style="padding:3px;padding-right:17px;">'
             + '<label class=" col-6"><b>Threhold aY</b></label>'
             + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=2.0>'
+            + '<label class=" col-6"><b>Segment size</b></label>'
+            + '<select id="segmentSize" class="segmentSize form-control col-6">'
+            + '<option value="100">100</option>'
+            + '<option value="300">300</option>'
+            + '<option value="500">500</option>'
+            + '</select>'
             + '</div>'
             + '<button style="" class="startpointbutton btn .btn-success" lat="' + e.latlng.lat + '" lon="' + e.latlng.lng + '">'
             + 'start segmentation from here</button>'
@@ -161,15 +167,17 @@ export class MapComponent implements OnInit, AfterViewInit {
         // add event listener to newly added a.merch-link element
         var startpointbutton = this.elementRef.nativeElement.querySelector(".startpointbutton");
         var inputbox = this.elementRef.nativeElement.querySelector(".inputbox");
+        var selectbox = this.elementRef.nativeElement.querySelector(".segmentSize");
         if (startpointbutton) {
 
-            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e, inputbox.value));
+            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e, inputbox.value,selectbox.value));
         }
     }
 
-    segmentRequest(event, threshold): void {
+    segmentRequest(event, threshold,segmentSize): void {
 
-        console.log("threshold:" + threshold)
+        console.log("threshold:" + threshold);
+        console.log("segment size:" + segmentSize);
 
         // get id from attribute
         var lat = event.target.getAttribute("lat");
@@ -180,7 +188,7 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.loadingSegmentData = true;
         this.loadingData = true;
 
-        this.mapService.getJourneySegments(this.selectedID, lat, lon,threshold)
+        this.mapService.getJourneySegments(this.selectedID, lat, lon,threshold,segmentSize)
             .subscribe(data => {
                 this.loadingData = false;
                 this.segmentData = data;
@@ -190,7 +198,11 @@ export class MapComponent implements OnInit, AfterViewInit {
                 console.log(this.segmentData.noOfSegments)
                 this.loadingSegmentData = false;
                 this.noSegmentData = false;
-                this.addSegmentsToMap("avgSpeed");
+                this.addSegmentsToMap("iri"); 
+                
+                console.log("max iri:"+this.segmentData.maxIri);
+                console.log("min iri:"+this.segmentData.minIri);
+
             });
     }
 
@@ -232,6 +244,9 @@ export class MapComponent implements OnInit, AfterViewInit {
             case "thresholdAy":
                 this.addSegmentsToMap("thresholdAy")
                 break;
+            case "iri":
+                this.addSegmentsToMap("iri")
+                break;
         }
     }
 
@@ -249,9 +264,9 @@ export class MapComponent implements OnInit, AfterViewInit {
         }
 
 
-        var segmentData = this.segmentData
+        var segmentData = this.segmentData;
 
-        this.metadata_journey_starttime_full = segmentData.startTime
+        this.metadata_journey_starttime_full = segmentData.startTime;
         this.metadata_journey_endtime_full = segmentData.endTime;
         this.metadata_no_of_segments_full = segmentData.noOfSegments;
 
@@ -303,6 +318,10 @@ export class MapComponent implements OnInit, AfterViewInit {
             case "thresholdAy":
                 color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter);
                 break;
+            case "iri":
+                console.log("iri type:"+segmentData.minIri+",max:"+segmentData.maxIri);
+                color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri);
+                break;
         }
         return color;
     }
@@ -320,6 +339,7 @@ export class MapComponent implements OnInit, AfterViewInit {
             + '<span><b> Above threshold count= </b>' + segmentInfo.aboveThreshold + ' </span><br>'
             + '<span><b> SD full mean accelY = </b>' + segmentInfo.standardDeviationFullMeanAccelY.toFixed(4) + '</span><br>'
             + '<span><b> SD segment mean accelY = </b>' + segmentInfo.standardDeviationSegmentMeanAccelY.toFixed(4) + '</span><br>'
+            + '<span><b> IRI = </b>' + segmentInfo.iri.toFixed(4) + '</span><br>'
             + '</div>'
         popup.setLatLng(e.latlng)
             .setContent(content)
@@ -328,6 +348,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
 
     chooseColor(thisavg, allmin, allmax) {
+
         // todo implement this
         var color5 = "#F5EE04";
         var color4 = "#F7960A";
@@ -339,7 +360,11 @@ export class MapComponent implements OnInit, AfterViewInit {
         var range = allmax - allmin;
         var rangePart = range / colors.length;
 
-        var colorIndex = Math.floor(thisavg / rangePart);
+        console.log("range:"+range);
+        console.log("rangePart:"+rangePart);
+
+        var colorIndex = Math.floor((thisavg-allmin) / rangePart);
+        console.log("colorIndex:"+colorIndex);
 
         if(colorIndex==colors.length){
             colorIndex--;
@@ -350,7 +375,11 @@ export class MapComponent implements OnInit, AfterViewInit {
         //refresh color codes by last used type (avgspeed,vertical movement)
         if (this.colorCodes.length == 0) {
             colors.forEach((colorStr, index) => {
-                var desc = (rangePart * index).toFixed(2) + " to " + (rangePart * (index + 1)).toFixed(2);
+
+                var from=(rangePart * index)+allmin;
+                var to=(rangePart * (index + 1))+allmin;
+
+                var desc = from.toFixed(2) + " to " + to.toFixed(2) ;
                 this.colorCodes.push(new ColorCode(colorStr, desc));
             });
         }
