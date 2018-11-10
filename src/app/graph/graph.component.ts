@@ -86,9 +86,9 @@ export class GraphComponent implements OnInit {
             id: 'mapbox.streets',
             accessToken: 'pk.eyJ1IjoiY29kZW1vIiwiYSI6ImNqaWFuNDh2aTE5M2Mza3J4YWd6MWoxNmwifQ.Dp5h88FvHAfAHaSRl508jQ'
         }).addTo(this.mymap);
-
+        this.mymap.setZoom(13);
     }
-
+    focued:boolean;
     addLocationsToMap(): void {
         if (this.polyline) {
             this.mymap.removeLayer(this.polyline);
@@ -100,10 +100,15 @@ export class GraphComponent implements OnInit {
             opacity: 0.5,
             smoothFactor: 1,
 
-        })
-            .addTo(this.mymap);
-        this.mymap.fitBounds(this.polyline.getBounds());
-        var map = this.mymap;
+        }).addTo(this.mymap);
+
+        if(!this.focued){
+            this.mymap.fitBounds(this.polyline.getBounds(),{padding: [50,50]});
+            this.focued=true;
+            this.mymap.setZoom(13);
+        }
+        // var map = this.mymap;
+       
 
         // this.polyline.on('click', (e) => this.addClickablePopup(e));
     }
@@ -145,6 +150,7 @@ export class GraphComponent implements OnInit {
 
                 this.loaded = true;
 
+
                 this.graphData = data;
                 this.loadingGraphData = false;
                 this.noGraphData = false;
@@ -158,6 +164,7 @@ export class GraphComponent implements OnInit {
             });
 
     }
+
 
     nextPart() {
         this.part++;
