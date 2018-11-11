@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Journey } from '../entities/journey';
 import { SegmentWrapper } from '../entities/segment-wrapper';
+import { TaggedDataWithName } from '../entities/tagged-data-with-name';
 
 @Injectable()
 export class MapService {
@@ -24,6 +25,9 @@ export class MapService {
     // private getJourneySegmentsDataUrl ="./../assets/JourneySegments.json";
 
     private getTaggedDataUrl =this.rootUrl+'getAllTags';
+    private getTaggedDataWithNamesUrl =this.rootUrl+'getTagsWithNames';
+
+
 
     constructor(private http: HttpClient) { }
 
@@ -61,6 +65,13 @@ export class MapService {
         return this.http.get<Object[]>(this.getTaggedDataUrl ).pipe(
             tap(dataItems => console.log(`tagged data fetched`)),
             catchError(this.handleError('getTaggedData', []))
+        );
+    }
+
+    getTaggedDataWithNames():Observable<TaggedDataWithName[]> {
+        return this.http.get<TaggedDataWithName[]>(this.getTaggedDataWithNamesUrl).pipe(
+            tap(dataItems => console.log(`tagged data with names fetched`)),
+            catchError(this.handleError('getTaggedDataWithNames', []))
         );
     }
 

@@ -1,4 +1,3 @@
-
 <div style="height: 10vh; margin-left: 25px" class="container row selectionArea">
   <div class="col-11">
 
@@ -46,32 +45,71 @@
   <div class="col col-2" id="" style="padding-left: 10px; height: 75vh; width: 100%;">
 
     <div style="padding:5px;height: 75vh; width: 100%;border-radius: 8px;border:2px solid #009BF6;font-size: 12px">
-      <div >
+      <div>
 
-        <div style="margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
+        <!-- <div style="margin:2px 0;padding:2px;border:2px solid lavender;border-radius: 5px"> -->
+          <div id="accordion">
+            <div class="card">
+              <div style="padding:5px;" class="card-header" id="headingOne">
+                <h6 class="mb-0">
+                  Tags
+                  <button style="display: inline; float: right;" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                    aria-controls="collapseOne">
+                    <i style="color:#252525;font-size: 20px" class="fas fa-caret-square-down"></i>
+                  </button>
+                </h6>
+              </div>
 
-          <div style="" class="custom-control custom-radio my-1 mr-sm-2">
-            <input  [(ngModel)]="taggedcheckbox"  type="checkbox" class="custom-control-input" id="taggedCheckBox" (change)="taggedCheckBoxChanged($event)">
-            <label class="custom-control-label" for="taggedCheckBox">Tagged Points</label>
-          </div>
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body" style="height:150px;overflow-y: scroll">
+                  <div style="display: inline;" class="custom-control custom-radio my-1 mr-sm-2">
+                    <input [(ngModel)]="taggedcheckbox" name="radiogroup" type="radio" class="custom-control-input" id="taggedCheckBox" (change)="taggedAllChanged($event)">
+                    <label class="custom-control-label" for="taggedCheckBox">All tags</label>
+                  </div>
+                  <div *ngFor="let tagName of taggedDataWithNames;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
+                    <input #checkboxes name="radiogroup" type="radio" class="custom-control-input" id="{{i}}" (change)="taggedDataWithNamesChanged($event,i)">
+                    <label class="custom-control-label" for="{{i}}">{{tagName.journeyName}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- </div> -->
         </div>
 
-        <div [hidden]="!predictedData" style="overflow-y: auto;height: 330px; margin:5px 0;padding:5px;border:2px solid lavender;border-radius: 5px">
-          <div *ngFor="let p of predictedDataShowning;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
-            <input #checkboxes type="checkbox" class="custom-control-input" id="{{i}}" (change)="predictedCheckBoxChanged($event,i)">
-            <label class="custom-control-label" for="{{i}}">{{p["subName"]}}</label>
-          </div>
+        <!-- <div style="margin:2px 0;padding:2px;border:2px solid lavender;border-radius: 5px"> -->
+          <div id="accordion" style="margin-top: 5px">
+            <div class="card">
+              <div style="padding:5px;" class="card-header" id="headingOne">
+                <h6 class="mb-0">
+                  Predictions
+                  <button style="display: inline; float: right;" class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                    aria-controls="collapseOne">
+                    <i style="color:#252525;font-size: 20px" class="fas fa-caret-square-down"></i>
+                  </button>
+                </h6>
+              </div>
+
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body" [hidden]="!predictedData" style="overflow-y: auto;height: 145px;">
+                  <div *ngFor="let p of predictedDataShowning;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
+                    <input #checkboxes name="radiogroup2" type="radio" class="custom-control-input" id="{{i+'p'}}" (change)="predictedRadioChanged($event,i)">
+                    <label class="custom-control-label" for="{{i+'p'}}">{{p["subName"]}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- </div> -->
         </div>
 
-        <div style="margin-top: 20px;margin-left: 10px;display: inline-block;">
+        <div style="margin-top: 5px;margin-left: 10px;display: inline-block;">
           <label for="focusCheck">Auto focus </label>
           <div style="margin-top: 0px">
-            <ui-switch id="focusCheck" [(ngModel)]="enableAutoFocus" color="#009BF6" switchColor="white" size="small" ></ui-switch>
+            <ui-switch id="focusCheck" [(ngModel)]="enableAutoFocus" color="#009BF6" switchColor="white" size="small"></ui-switch>
           </div>
         </div>
 
-        <div  style="float: right;margin-top: 35px;margin-right: 5px;">
-          <button  class="btn btn-outline-primary" type="button" (click)=clearAll()>Clear All</button>
+        <div style="float: right;margin-top: 15px;margin-right: 5px;">
+          <button class="btn btn-outline-primary" type="button" (click)=clearAll()>Clear All</button>
         </div>
 
       </div>

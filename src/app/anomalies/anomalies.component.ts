@@ -2,6 +2,8 @@ import { Component, OnInit, ElementRef, AfterViewInit, ViewChildren, QueryList }
 import { MapService } from '../services/map.service';
 import { UploadService } from '../services/upload.service';
 import { UiSwitchModule } from 'ngx-toggle-switch';
+import { TaggedDataWithName } from '../entities/tagged-data-with-name';
+import { TaggedPoint } from '../entities/tagged-point';
 
 declare let L: any;
 
@@ -22,11 +24,13 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   public predictedDataShowning: Object[];
 
   public taggedData: any;
+  public taggedDataWithNames: TaggedDataWithName[];
   public taggedDataShowing: any;
 
   public predictedCheckBox: boolean;
   public taggedCheckBox: boolean;
 
+  public allTags: TaggedPoint[];
 
   loadingPredictionGroups;
   groupIds: Object[];
@@ -41,9 +45,12 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   enableAutoFocus = true;
   allcheckboxes;
 
-  feathureGroups: any[] = new Array;
+  featureGroups: any[] = new Array;
 
   public taggedGroup;
+
+
+  public predictionGroup;
 
   constructor(private mapService: MapService, private elementRef: ElementRef, private uploadService: UploadService) {
 
@@ -51,13 +58,13 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getGroupIds();
-    this.getTaggedData();
+    // this.getTaggedData();
+    this.getTaggedDataWithNames();
 
   }
 
   ngAfterViewInit(): void {
     this.configureMap();
-
   }
 
   configureMap(): void {
@@ -107,7 +114,7 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
       .subscribe(data => {
         this.predictedData = data;
         this.loadingAnomalyData = false;
-        this.predictedDataShowning=this.predictedData;
+        this.predictedDataShowning = this.predictedData;
       });
   }
 
@@ -116,53 +123,101 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
       .subscribe(data => {
         this.taggedData = data;
         this.loadingAnomalyData = false;
+        this.clearAll();
       });
   }
 
+  getTaggedDataWithNames() {
+    this.mapService.getTaggedDataWithNames()
+      .subscribe(data => {
+        this.taggedDataWithNames = data;
+        this.loadingAnomalyData = false;
+        this.clearAll();
+      });
+  }
 
-  taggedCheckBoxChanged(event) {
+  //all tags
+
+  taggedAllChanged(event) {
+    console.log("...came...")
     var checked = event.target.checked;
     if (checked) { //add markers
       if (this.taggedGroup) {
-        this.addLayerToMap(this.taggedGroup);
-      } else {
-        this.taggedGroup = L.featureGroup();
-
-        this.taggedGroup = this.addPointsToLayer(this.taggedData, this.taggedGroup, 'blue');
-        this.addLayerToMap(this.taggedGroup);
+        this.removeLayerFromMap(this.taggedGroup);
       }
+      this.taggedGroup = L.featureGroup();
+
+      if (!this.allTags) {
+        this.allTags = new Array;
+        this.taggedDataWithNames.forEach(element => {
+          element.tags.forEach(tagPoint => {
+            this.allTags.push(tagPoint);
+          });
+        });
+      }
+      this.taggedGroup = this.addPointsToLayer(this.allTags, this.taggedGroup, 'blue');
+      this.addLayerToMap(this.taggedGroup);
+
     } else { //remove markers
 
       this.removeLayerFromMap(this.taggedGroup);
     }
   }
 
-
-  predictedCheckBoxChanged(event, index) {
+  taggedDataWithNamesChanged(event, i) {
     var checked = event.target.checked;
-    if (checked) { //check true
-
-      if(this.predictedDataShowning){
-        this.predictedDataShowning=this.predictedData;
+    if (checked) {
+      if (this.taggedGroup) {
+        this.removeLayerFromMap(this.taggedGroup);
       }
+      this.taggedGroup = L.featureGroup();
 
-      if (this.feathureGroups[index]) {//there is the layerGroup
-        var layerGroup = this.feathureGroups[index]; //get layer from dictionary
-        this.addLayerToMap(layerGroup);
+      this.taggedGroup = this.addPointsToLayer(this.taggedDataWithNames[i].tags, this.taggedGroup, 'blue');
+      this.addLayerToMap(this.taggedGroup);
 
-      } else {//there is no layer for index
-        var data = this.predictedDataShowning[index]['data'];
-        var layerGroup = L.featureGroup();
-        layerGroup = this.addPointsToLayer(data, layerGroup, 'red')//adding points to layerGroup
-
-        this.feathureGroups[index] = layerGroup; //add to dictionary
-        this.addLayerToMap(layerGroup);
-      }
-    } else { //check false need to remove
-      var layerGroup = this.feathureGroups[index]; //get layer from dictionary
-      this.removeLayerFromMap(layerGroup);
     }
   }
+  predictedRadioChanged(event, i) {
+    var checked = event.target.checked;
+    if (checked) {
+      if (this.predictedDataShowning) {
+        this.predictedDataShowning = this.predictedData;
+      }
+      if (this.predictionGroup) {
+        this.removeLayerFromMap(this.predictionGroup);
+      }
+      this.predictionGroup = L.featureGroup();
+      var data = this.predictedDataShowning[i]['data'];
+      this.predictionGroup = this.addPointsToLayer(data, this.predictionGroup, 'red');
+      this.addLayerToMap(this.predictionGroup);
+
+    }
+  }
+  // predictedCheckBoxChanged(event, index) {
+  //   var checked = event.target.checked;
+  //   if (checked) { //check true
+
+  //     if (this.predictedDataShowning) {
+  //       this.predictedDataShowning = this.predictedData;
+  //     }
+
+  //     if (this.featureGroups[index]) {//there is the layerGroup
+  //       var layerGroup = this.featureGroups[index]; //get layer from dictionary
+  //       this.addLayerToMap(layerGroup);
+
+  //     } else {//there is no layer for index
+  //       var data = this.predictedDataShowning[index]['data'];
+  //       var layerGroup = L.featureGroup();
+  //       layerGroup = this.addPointsToLayer(data, layerGroup, 'red')//adding points to layerGroup
+
+  //       this.featureGroups[index] = layerGroup; //add to dictionary
+  //       this.addLayerToMap(layerGroup);
+  //     }
+  //   } else { //check false need to remove
+  //     var layerGroup = this.featureGroups[index]; //get layer from dictionary
+  //     this.removeLayerFromMap(layerGroup);
+  //   }
+  // }
 
   addPointsToLayer(data, layerGroup, markerColor) {
     data.forEach(element => {
@@ -190,10 +245,12 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   }
 
   removeAllLayers() {
-    if (this.feathureGroups) {
-      this.feathureGroups.forEach(layerGroup => {
-        this.mymap.removeLayer(layerGroup)
-      });
+
+    if (this.predictionGroup) {
+      this.mymap.removeLayer(this.predictionGroup)
+    }
+    if (this.taggedGroup) {
+      this.mymap.removeLayer(this.taggedGroup)
     }
   }
 
@@ -210,8 +267,8 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
       element.nativeElement.checked = false;
     });
 
-    this.taggedcheckbox=false;
-    
+    this.taggedcheckbox = false;
+
   }
 
 
