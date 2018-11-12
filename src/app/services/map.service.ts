@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Journey } from '../entities/journey';
 import { SegmentWrapper } from '../entities/segment-wrapper';
 import { TaggedDataWithName } from '../entities/tagged-data-with-name';
+import { ColorRange } from '../entities/color-range';
 
 @Injectable()
 export class MapService {
@@ -26,7 +27,8 @@ export class MapService {
 
     private getTaggedDataUrl =this.rootUrl+'getAllTags';
     private getTaggedDataWithNamesUrl =this.rootUrl+'getTagsWithNames';
-
+    // private getColorRangesUrl=this.rootUrl+'getColorRanges';
+    private getColorRangesUrl="./../assets/getColorRanges.json";
 
 
     constructor(private http: HttpClient) { }
@@ -88,7 +90,13 @@ export class MapService {
     //         catchError(this.handleError('getJourneySegments', []))
     //     );
     // }
-
+    
+    getColorRanges():Observable<ColorRange[]> {
+        return this.http.get<ColorRange[]>(this.getColorRangesUrl).pipe(
+            tap(segmendata => console.log('segment data fetched')),
+            catchError(this.handleError('getJourneySegments', []))
+        );
+    }
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {

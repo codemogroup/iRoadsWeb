@@ -4,6 +4,7 @@ import { UploadService } from '../services/upload.service';
 import { UiSwitchModule } from 'ngx-toggle-switch';
 import { TaggedDataWithName } from '../entities/tagged-data-with-name';
 import { TaggedPoint } from '../entities/tagged-point';
+import { ColorRange } from '../entities/color-range';
 
 declare let L: any;
 
@@ -25,6 +26,7 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
 
   public taggedData: any;
   public taggedDataWithNames: TaggedDataWithName[];
+  
   public taggedDataShowing: any;
 
   public predictedCheckBox: boolean;
@@ -60,6 +62,8 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
     this.getGroupIds();
     // this.getTaggedData();
     this.getTaggedDataWithNames();
+
+    
 
   }
 
@@ -135,6 +139,8 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
         this.clearAll();
       });
   }
+
+
 
   //all tags
 

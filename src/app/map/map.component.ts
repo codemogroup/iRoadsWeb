@@ -5,6 +5,7 @@ import { MapService } from '../services/map.service';
 import { SegmentWrapper } from '../entities/segment-wrapper';
 import { ColorCode } from '../entities/color-code';
 import { SegmentInfo } from '../entities/segment-info';
+import { ColorRange } from '../entities/color-range';
 
 declare let L: any;
 @Component({
@@ -19,6 +20,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     public journeyIDs: Object[];
     public selectedID;
+    public colorRanges: ColorRange[];
 
     loadingIDs;
     loadingData;
@@ -51,14 +53,13 @@ export class MapComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-
-
         this.getJourneyIDs();
         this.selectedID = 'select';
         this.noSegmentData = true;
 
         // to test only
         // this.addSegmentTest("avgSpeed");
+        this.getColorRanges();
     }
 
     ngAfterViewInit(): void {
@@ -147,7 +148,7 @@ export class MapComponent implements OnInit, AfterViewInit {
             + '<div class="">'
             + '<div class="row" style="padding:3px;padding-right:17px;">'
             + '<label class=" col-6"><b>Threhold aY</b></label>'
-            + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=2.0>'
+            + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=0.15>'
             + '<label class=" col-6"><b>Segment size</b></label>'
             + '<select id="segmentSize" class="segmentSize form-control col-6">'
             + '<option value="100">100</option>'
@@ -170,14 +171,14 @@ export class MapComponent implements OnInit, AfterViewInit {
         var selectbox = this.elementRef.nativeElement.querySelector(".segmentSize");
         if (startpointbutton) {
 
-            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e, inputbox.value,selectbox.value));
+            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e, inputbox.value, selectbox.value));
         }
     }
 
-    segmentRequest(event, threshold,segmentSize): void {
+    segmentRequest(event, threshold, segmentSize): void {
 
-        console.log("threshold:" + threshold);
-        console.log("segment size:" + segmentSize);
+        // console.log("threshold:" + threshold);
+        // console.log("segment size:" + segmentSize);
 
         // get id from attribute
         var lat = event.target.getAttribute("lat");
@@ -188,7 +189,7 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.loadingSegmentData = true;
         this.loadingData = true;
 
-        this.mapService.getJourneySegments(this.selectedID, lat, lon,threshold,segmentSize)
+        this.mapService.getJourneySegments(this.selectedID, lat, lon, threshold, segmentSize)
             .subscribe(data => {
                 this.loadingData = false;
                 this.segmentData = data;
@@ -198,10 +199,10 @@ export class MapComponent implements OnInit, AfterViewInit {
                 console.log(this.segmentData.noOfSegments)
                 this.loadingSegmentData = false;
                 this.noSegmentData = false;
-                this.addSegmentsToMap("iri"); 
-                
-                console.log("max iri:"+this.segmentData.maxIri);
-                console.log("min iri:"+this.segmentData.minIri);
+                this.addSegmentsToMap("iri");
+
+                // console.log("max iri:" + this.segmentData.maxIri);
+                // console.log("min iri:" + this.segmentData.minIri);
 
             });
     }
@@ -297,33 +298,82 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.mymap.fitBounds(this.segmentLayerGroup.getBounds());
     }
 
+
+    getColorRanges() {
+        this.mapService.getColorRanges()
+            .subscribe(data => {
+                this.colorRanges = data;
+
+                console.log(data);
+            });
+    }
+
+
+    isContainInColorRanges(colorBy: string): boolean {
+        var contain = false;
+        this.colorRanges.forEach(element => {
+            if (element.rangeFor === colorBy) {
+                console.log(colorBy);
+                console.log(element.rangeFor);
+                contain = true;
+            }
+        });
+        return contain;
+    }
+
+    getColorRange(colorBy): ColorRange {
+        var colorRange = null;
+        this.colorRanges.forEach(element => {
+            if (element.rangeFor == colorBy) {
+                colorRange = element;
+            }
+        });
+        return colorRange;
+    }
+
     chooseColorBy(segmentInfo: SegmentInfo, segmentData: SegmentWrapper, colorBy: string): any {
         var color = "";
-        switch (colorBy) {
-            case "avgSpeed":
-                color = this.chooseColor(segmentInfo.avgSpeed, segmentData.minAvgSpeed, segmentData.maxAvgSpeed);
-                break;
-            case "avgAccelY":
-                color = this.chooseColor(segmentInfo.avgAccelY, segmentData.minAvgAccelY, segmentData.maxAvgAccelY);
-                break;
-            case "standardDeviationFullMeanAccelY":
-                color = this.chooseColor(segmentInfo.standardDeviationFullMeanAccelY, segmentData.minStandardDeviationFullMeanAccelY, segmentData.maxStandardDeviationFullMeanAccelY);
-                break;
-            case "standardDeviationSegmentMeanAccelY":
-                color = this.chooseColor(segmentInfo.standardDeviationSegmentMeanAccelY, segmentData.minStandardDeviationSegmentMeanAccelY, segmentData.maxStandardDeviationSegmentMeanAccelY);
-                break;
-            case "avgRmsAccel":
-                color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel);
-                break;
-            case "thresholdAy":
-                color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter);
-                break;
-            case "iri":
-                console.log("iri type:"+segmentData.minIri+",max:"+segmentData.maxIri);
-                color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri);
-                break;
+
+        var isContain = this.isContainInColorRanges(colorBy);
+        console.log(isContain);
+
+        if (isContain) {
+            console.log("true")
+            var colorRange = this.getColorRange(colorBy);
+            this.updateColorCodesForColorRange(colorRange);
+            color = this.chooseColorByRange(colorRange, segmentInfo[colorBy]);
+
+        }
+        else {
+            console.log("false")
+            switch (colorBy) {
+
+                case "avgSpeed":
+                    color = this.chooseColor(segmentInfo.avgSpeed, segmentData.minAvgSpeed, segmentData.maxAvgSpeed);
+                    break;
+                case "avgAccelY":
+                    color = this.chooseColor(segmentInfo.avgAccelY, segmentData.minAvgAccelY, segmentData.maxAvgAccelY);
+                    break;
+                case "standardDeviationFullMeanAccelY":
+                    color = this.chooseColor(segmentInfo.standardDeviationFullMeanAccelY, segmentData.minStandardDeviationFullMeanAccelY, segmentData.maxStandardDeviationFullMeanAccelY);
+                    break;
+                case "standardDeviationSegmentMeanAccelY":
+                    color = this.chooseColor(segmentInfo.standardDeviationSegmentMeanAccelY, segmentData.minStandardDeviationSegmentMeanAccelY, segmentData.maxStandardDeviationSegmentMeanAccelY);
+                    break;
+                case "avgRmsAccel":
+                    color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel);
+                    break;
+                case "thresholdAy":
+                    color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter);
+                    break;
+                case "iri":
+                    // console.log("iri type:" + segmentData.minIri + ",max:" + segmentData.maxIri);
+                    color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri);
+                    break;
+            }
         }
         return color;
+
     }
 
     addSegmentPopup(e: any, segmentInfo: SegmentInfo, speedColor: string, colorBy: string): any {
@@ -345,49 +395,83 @@ export class MapComponent implements OnInit, AfterViewInit {
             .setContent(content)
             .openOn(this.mymap);
     }
+    // todo implement this
+    color5 = "#F5EE04";
+    color4 = "#F7960A";
+    color3 = "#DF2C2C";
+    color2 = "#A93226";
+    color1 = "#7B241C";
 
+    colors = [this.color1, this.color2, this.color3, this.color4, this.color5];
 
     chooseColor(thisavg, allmin, allmax) {
 
-        // todo implement this
-        var color5 = "#F5EE04";
-        var color4 = "#F7960A";
-        var color3 = "#DF2C2C";
-        var color2 = "#A93226";
-        var color1 = "#7B241C";
 
-        var colors = [color1, color2, color3, color4, color5];
         var range = allmax - allmin;
-        var rangePart = range / colors.length;
+        var rangePart = range / this.colors.length;
 
-        console.log("range:"+range);
-        console.log("rangePart:"+rangePart);
+        // console.log("range:" + range);
+        // console.log("rangePart:" + rangePart);
 
-        var colorIndex = Math.floor((thisavg-allmin) / rangePart);
-        console.log("colorIndex:"+colorIndex);
+        var colorIndex = Math.floor((thisavg - allmin) / rangePart);
+        // console.log("colorIndex:" + colorIndex);
 
-        if(colorIndex==colors.length){
+        if (colorIndex == this.colors.length) {
             colorIndex--;
         }
 
-        var color = colors[colorIndex];
+        var color = this.colors[colorIndex];
 
         //refresh color codes by last used type (avgspeed,vertical movement)
         if (this.colorCodes.length == 0) {
-            colors.forEach((colorStr, index) => {
+            this.colors.forEach((colorStr, index) => {
 
-                var from=(rangePart * index)+allmin;
-                var to=(rangePart * (index + 1))+allmin;
+                var from = (rangePart * index) + allmin;
+                var to = (rangePart * (index + 1)) + allmin;
 
-                var desc = from.toFixed(2) + " to " + to.toFixed(2) ;
+                var desc = from.toFixed(2) + " to " + to.toFixed(2);
                 this.colorCodes.push(new ColorCode(colorStr, desc));
             });
         }
         return color;
     }
 
+    updateColorCodes(from, to, colorStr, last) {
+        var desc = from.toFixed(2) + " to " + to.toFixed(2);
+        if (last) {
+            desc = from.toFixed(2)+"=<" ;
+        }
+        this.colorCodes.push(new ColorCode(colorStr, desc));
+    }
 
+    updateColorCodesForColorRange(colorRange: ColorRange) {
+        if (this.colorCodes.length == 0) {
+            this.updateColorCodes(colorRange.ranges.r0.from, colorRange.ranges.r0.to, this.color1, false);
+            this.updateColorCodes(colorRange.ranges.r1.from, colorRange.ranges.r1.to, this.color2, false);
+            this.updateColorCodes(colorRange.ranges.r2.from, colorRange.ranges.r2.to, this.color3, false);
+            this.updateColorCodes(colorRange.ranges.r3.from, colorRange.ranges.r3.to, this.color4, false);
+            this.updateColorCodes(colorRange.ranges.r4.from, colorRange.ranges.r4.to, this.color5, true);
+        }
+    }
 
+    chooseColorByRange(colorRange: ColorRange, value) {
+        if (value >= colorRange.ranges.r0.from && value < colorRange.ranges.r0.to) {
+            return this.color1;
+        }
+        else if (value >= colorRange.ranges.r1.from && value < colorRange.ranges.r1.to) {
+            return this.color2;
+        }
+        else if (value >= colorRange.ranges.r2.from && value < colorRange.ranges.r2.to) {
+            return this.color3;
+        }
+        else if (value >= colorRange.ranges.r3.from && value < colorRange.ranges.r3.to) {
+            return this.color4;
+        }
+        else if (value >= colorRange.ranges.r4.from) {
+            return this.color5;
+        }
+
+    }
 
 
 
