@@ -340,8 +340,14 @@ export class MapComponent implements OnInit, AfterViewInit {
         if (isContain) {
             console.log("true")
             var colorRange = this.getColorRange(colorBy);
-            this.updateColorCodesForColorRange(colorRange);
-            color = this.chooseColorByRange(colorRange, segmentInfo[colorBy]);
+            if(colorBy=="avgSpeed"){
+                this.updateColorCodesForColorRange(colorRange,true);
+                color = this.chooseColorByRange(colorRange, segmentInfo[colorBy],true);
+            }else{
+                this.updateColorCodesForColorRange(colorRange,false);
+                color = this.chooseColorByRange(colorRange, segmentInfo[colorBy],false);
+            }
+            
 
         }
         else {
@@ -349,26 +355,26 @@ export class MapComponent implements OnInit, AfterViewInit {
             switch (colorBy) {
 
                 case "avgSpeed":
-                    color = this.chooseColor(segmentInfo.avgSpeed, segmentData.minAvgSpeed, segmentData.maxAvgSpeed);
+                    color = this.chooseColor(segmentInfo.avgSpeed, segmentData.minAvgSpeed, segmentData.maxAvgSpeed,true);
                     break;
                 case "avgAccelY":
-                    color = this.chooseColor(segmentInfo.avgAccelY, segmentData.minAvgAccelY, segmentData.maxAvgAccelY);
+                    color = this.chooseColor(segmentInfo.avgAccelY, segmentData.minAvgAccelY, segmentData.maxAvgAccelY,false);
                     break;
                 case "standardDeviationFullMeanAccelY":
-                    color = this.chooseColor(segmentInfo.standardDeviationFullMeanAccelY, segmentData.minStandardDeviationFullMeanAccelY, segmentData.maxStandardDeviationFullMeanAccelY);
+                    color = this.chooseColor(segmentInfo.standardDeviationFullMeanAccelY, segmentData.minStandardDeviationFullMeanAccelY, segmentData.maxStandardDeviationFullMeanAccelY,false);
                     break;
                 case "standardDeviationSegmentMeanAccelY":
-                    color = this.chooseColor(segmentInfo.standardDeviationSegmentMeanAccelY, segmentData.minStandardDeviationSegmentMeanAccelY, segmentData.maxStandardDeviationSegmentMeanAccelY);
+                    color = this.chooseColor(segmentInfo.standardDeviationSegmentMeanAccelY, segmentData.minStandardDeviationSegmentMeanAccelY, segmentData.maxStandardDeviationSegmentMeanAccelY,false);
                     break;
                 case "avgRmsAccel":
-                    color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel);
+                    color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel,false);
                     break;
                 case "thresholdAy":
-                    color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter);
+                    color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter,false);
                     break;
                 case "iri":
                     // console.log("iri type:" + segmentData.minIri + ",max:" + segmentData.maxIri);
-                    color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri);
+                    color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri,false);
                     break;
             }
         }
@@ -396,15 +402,15 @@ export class MapComponent implements OnInit, AfterViewInit {
             .openOn(this.mymap);
     }
     // todo implement this
-    color5 = "#F5EE04";
-    color4 = "#F7960A";
+    color1 = "#F5EE04";
+    color2 = "#F7960A";
     color3 = "#DF2C2C";
-    color2 = "#A93226";
-    color1 = "#7B241C";
+    color4 = "#A93226";
+    color5 = "#7B241C";
 
     colors = [this.color1, this.color2, this.color3, this.color4, this.color5];
 
-    chooseColor(thisavg, allmin, allmax) {
+    chooseColor(thisavg, allmin, allmax, reverse: boolean) {
 
 
         var range = allmax - allmin;
@@ -420,18 +426,33 @@ export class MapComponent implements OnInit, AfterViewInit {
             colorIndex--;
         }
 
-        var color = this.colors[colorIndex];
+        var color="";
+        if (reverse) {
+            var color = this.colors[this.colors.length - colorIndex - 1];
+            if (this.colorCodes.length == 0) {
+                this.colors.slice().reverse().forEach((colorStr, index) => {
 
-        //refresh color codes by last used type (avgspeed,vertical movement)
-        if (this.colorCodes.length == 0) {
-            this.colors.forEach((colorStr, index) => {
+                    var from = (rangePart * index) + allmin;
+                    var to = (rangePart * (index + 1)) + allmin;
 
-                var from = (rangePart * index) + allmin;
-                var to = (rangePart * (index + 1)) + allmin;
+                    var desc = from.toFixed(2) + " to " + to.toFixed(2);
+                    this.colorCodes.push(new ColorCode(colorStr, desc));
+                });
+            }
+        } else {
+            var color = this.colors[colorIndex];
+            //refresh color codes by last used type (avgspeed,vertical movement)
+            if (this.colorCodes.length == 0) {
+                this.colors.forEach((colorStr, index) => {
 
-                var desc = from.toFixed(2) + " to " + to.toFixed(2);
-                this.colorCodes.push(new ColorCode(colorStr, desc));
-            });
+                    var from = (rangePart * index) + allmin;
+                    var to = (rangePart * (index + 1)) + allmin;
+
+                    var desc = from.toFixed(2) + " to " + to.toFixed(2);
+                    this.colorCodes.push(new ColorCode(colorStr, desc));
+                });
+            }
+
         }
         return color;
     }
@@ -439,36 +460,74 @@ export class MapComponent implements OnInit, AfterViewInit {
     updateColorCodes(from, to, colorStr, last) {
         var desc = from.toFixed(2) + " to " + to.toFixed(2);
         if (last) {
-            desc = from.toFixed(2)+"=<" ;
+            desc = from.toFixed(2) + "=<";
         }
         this.colorCodes.push(new ColorCode(colorStr, desc));
     }
 
-    updateColorCodesForColorRange(colorRange: ColorRange) {
-        if (this.colorCodes.length == 0) {
-            this.updateColorCodes(colorRange.ranges.r0.from, colorRange.ranges.r0.to, this.color1, false);
-            this.updateColorCodes(colorRange.ranges.r1.from, colorRange.ranges.r1.to, this.color2, false);
-            this.updateColorCodes(colorRange.ranges.r2.from, colorRange.ranges.r2.to, this.color3, false);
-            this.updateColorCodes(colorRange.ranges.r3.from, colorRange.ranges.r3.to, this.color4, false);
-            this.updateColorCodes(colorRange.ranges.r4.from, colorRange.ranges.r4.to, this.color5, true);
+    updateColorCodesForColorRange(colorRange: ColorRange, reverse: boolean) {
+
+        if (reverse) {
+            if (this.colorCodes.length == 0) {
+                this.updateColorCodes(colorRange.ranges.r0.from, colorRange.ranges.r0.to, this.color5, false);
+                this.updateColorCodes(colorRange.ranges.r1.from, colorRange.ranges.r1.to, this.color4, false);
+                this.updateColorCodes(colorRange.ranges.r2.from, colorRange.ranges.r2.to, this.color3, false);
+                this.updateColorCodes(colorRange.ranges.r3.from, colorRange.ranges.r3.to, this.color2, false);
+                this.updateColorCodes(colorRange.ranges.r4.from, colorRange.ranges.r4.to, this.color1, true);
+            }
+        }
+
+        else {
+            if (this.colorCodes.length == 0) {
+                this.updateColorCodes(colorRange.ranges.r0.from, colorRange.ranges.r0.to, this.color1, false);
+                this.updateColorCodes(colorRange.ranges.r1.from, colorRange.ranges.r1.to, this.color2, false);
+                this.updateColorCodes(colorRange.ranges.r2.from, colorRange.ranges.r2.to, this.color3, false);
+                this.updateColorCodes(colorRange.ranges.r3.from, colorRange.ranges.r3.to, this.color4, false);
+                this.updateColorCodes(colorRange.ranges.r4.from, colorRange.ranges.r4.to, this.color5, true);
+            }
         }
     }
 
-    chooseColorByRange(colorRange: ColorRange, value) {
+    chooseColorByRange(colorRange: ColorRange, value, reverse: boolean) {
         if (value >= colorRange.ranges.r0.from && value < colorRange.ranges.r0.to) {
-            return this.color1;
+            if (reverse) {
+                return this.color5;
+            }
+            else {
+                return this.color1;
+            }
         }
         else if (value >= colorRange.ranges.r1.from && value < colorRange.ranges.r1.to) {
-            return this.color2;
+            if (reverse) {
+                return this.color4;
+            }
+            else {
+                return this.color2;
+            }
         }
         else if (value >= colorRange.ranges.r2.from && value < colorRange.ranges.r2.to) {
-            return this.color3;
+            if (reverse) {
+                return this.color3;
+            }
+            else {
+                return this.color3;
+            }
         }
         else if (value >= colorRange.ranges.r3.from && value < colorRange.ranges.r3.to) {
-            return this.color4;
+            if (reverse) {
+                return this.color2;
+            }
+            else {
+                return this.color4;
+            }
         }
         else if (value >= colorRange.ranges.r4.from) {
-            return this.color5;
+            if (reverse) {
+                return this.color1;
+            }
+            else {
+                return this.color5;
+            }
         }
 
     }
