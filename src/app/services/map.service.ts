@@ -27,8 +27,8 @@ export class MapService {
 
     private getTaggedDataUrl =this.rootUrl+'getAllTags';
     private getTaggedDataWithNamesUrl =this.rootUrl+'getTagsWithNames';
-    // private getColorRangesUrl=this.rootUrl+'getColorRanges';
-    private getColorRangesUrl="./../assets/getColorRanges.json";
+    private getColorRangesUrl=this.rootUrl+'getColorRanges';
+    // private getColorRangesUrl="./../assets/getColorRanges.json";
 
 
     constructor(private http: HttpClient) { }
