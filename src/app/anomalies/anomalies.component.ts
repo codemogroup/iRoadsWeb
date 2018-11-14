@@ -170,19 +170,28 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+  taggedColors=["#00FF00","#0000FF","	#FFFF00","#00FFFF","#FF00FF","#808080","#808000","#008080","#D2691E","#2F4F4F"];
+
+  taggedList={};
+
   taggedDataWithNamesChanged(event, i) {
     var checked = event.target.checked;
     if (checked) {
-      if (this.taggedGroup) {
-        this.removeLayerFromMap(this.taggedGroup);
-      }
+      // if (this.taggedGroup) {
+      //   this.removeLayerFromMap(this.taggedGroup);
+      // }
       this.taggedGroup = L.featureGroup();
 
-      this.taggedGroup = this.addPointsToLayer(this.taggedDataWithNames[i].tags, this.taggedGroup, 'blue');
+      this.taggedGroup = this.addPointsToLayer(this.taggedDataWithNames[i].tags, this.taggedGroup, this.taggedColors[i]);
+      this.taggedList[i]=this.taggedGroup;
       this.addLayerToMap(this.taggedGroup);
 
+    }else{
+      this.removeLayerFromMap(this.taggedList[i]);
     }
   }
+
   predictedRadioChanged(event, i) {
     var checked = event.target.checked;
     if (checked) {
@@ -251,7 +260,6 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
   }
 
   removeAllLayers() {
-
     if (this.predictionGroup) {
       this.mymap.removeLayer(this.predictionGroup)
     }
@@ -265,8 +273,14 @@ export class AnomaliesComponent implements OnInit, AfterViewInit {
 
   clearAll() {
     this.removeAllLayers();
-    if (this.taggedGroup) {
-      this.mymap.removeLayer(this.taggedGroup)
+    // if (this.taggedList) {
+    //   this.mymap.removeLayer(this.taggedGroup)
+    // }
+
+    for (var i in this.taggedList) {
+      if (this.taggedList.hasOwnProperty(i)) {
+        this.removeLayerFromMap(this.taggedList[i]);
+      }
     }
 
     this.checkboxes.forEach((element) => {

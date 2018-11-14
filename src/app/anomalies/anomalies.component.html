@@ -63,11 +63,11 @@
               <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body" style="height:150px;overflow-y: scroll">
                   <div style="display: inline;" class="custom-control custom-radio my-1 mr-sm-2">
-                    <input [(ngModel)]="taggedcheckbox" name="radiogroup" type="radio" class="custom-control-input" id="taggedCheckBox" (change)="taggedAllChanged($event)">
+                    <input [(ngModel)]="taggedcheckbox" name="radiogroup" type="checkbox" class="custom-control-input" id="taggedCheckBox" (change)="taggedAllChanged($event)">
                     <label class="custom-control-label" for="taggedCheckBox">All tags</label>
                   </div>
                   <div *ngFor="let tagName of taggedDataWithNames;let i = index" style="" class="custom-control custom-radio my-1 mr-sm-2">
-                    <input #checkboxes name="radiogroup" type="radio" class="custom-control-input" id="{{i}}" (change)="taggedDataWithNamesChanged($event,i)">
+                    <input #checkboxes name="radiogroup" type="checkbox" class="custom-control-input" id="{{i}}" (change)="taggedDataWithNamesChanged($event,i)">
                     <label class="custom-control-label" for="{{i}}">{{tagName.journeyName}}</label>
                   </div>
                 </div>
