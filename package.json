@@ -34,7 +34,8 @@
     "ngx-select-ex": "^3.5.2-ng4",
     "ngx-toggle-switch": "^2.0.5",
     "ngx-ui-switch": "^1.6.1",
-    "rxjs": "^5.5.12",
+    "rxjs": "^6.0.0",
+    "rxjs-compat": "^6.3.3",
     "selectize": "^0.12.6",
     "zone.js": "^0.8.14"
   },
