@@ -144,21 +144,27 @@ export class MapComponent implements OnInit, AfterViewInit {
     addClickablePopup(e) {
         var popup = L.popup();
         var content =
-            '<div style="overflow:hidden">'
-            + '<div class="">'
-            + '<div class="row" style="padding:3px;padding-right:17px;">'
-            + '<label class=" col-6"><b>Threhold aY</b></label>'
-            + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=0.15>'
-            + '<label class=" col-6"><b>Segment size</b></label>'
-            + '<select id="segmentSize" class="segmentSize form-control col-6">'
-            + '<option value="100">100</option>'
-            + '<option value="300">300</option>'
-            + '<option value="500">500</option>'
-            + '</select>'
-            + '</div>'
-            + '<button style="" class="startpointbutton btn .btn-success" lat="' + e.latlng.lat + '" lon="' + e.latlng.lng + '">'
-            + 'start segmentation from here</button>'
-            + '</div>'
+            '<div style="overflow:hidden" style="margin-right:20px">'
+                +'<div class="row" style="width:100%;">'
+                    +'<div class="col-6" style="padding:3px;padding-right:17px;">'
+                        +'<div style="margin-left:5px" class=row>'
+                            + '<label class="col-6"><b>Threhold aY</b></label>'
+                            + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=0.15>'
+                        +'</div>'
+                        +'<div style="margin-left:5px" class=row>'
+                            + '<label class=" col-6"><b>Segment size</b></label>'
+                            + '<select id="segmentSize" class="segmentSize form-control col-6">'
+                                + '<option value="100">100</option>'
+                                + '<option value="300">300</option>'
+                                + '<option value="500">500</option>'
+                            + '</select>'
+                        +'</div>'
+                    + '</div>'
+                    +'<div class="col-6">'
+                        + '<button style="" class="startpointbutton btn .btn-success" lat="' + e.latlng.lat + '" lon="' + e.latlng.lng + '">'
+                        + 'start segmentation from here</button>'
+                    +'</div>'
+                + '</div>'
             + '<div/>';
         popup.setLatLng(e.latlng)
             .setContent(content)
@@ -191,6 +197,9 @@ export class MapComponent implements OnInit, AfterViewInit {
 
         this.mapService.getJourneySegments(this.selectedID, lat, lon, threshold, segmentSize)
             .subscribe(data => {
+                if (this.polyline) {
+                    this.mymap.removeLayer(this.polyline);
+                }
                 this.loadingData = false;
                 this.segmentData = data;
 
@@ -247,6 +256,9 @@ export class MapComponent implements OnInit, AfterViewInit {
                 break;
             case "iri":
                 this.addSegmentsToMap("iri")
+                break;
+            case "iri_ml":
+                this.addSegmentsToMap("iri_ml")
                 break;
         }
     }
@@ -335,19 +347,16 @@ export class MapComponent implements OnInit, AfterViewInit {
         var color = "";
 
         var isContain = this.isContainInColorRanges(colorBy);
-        console.log(isContain);
 
         if (isContain) {
-            console.log("true")
             var colorRange = this.getColorRange(colorBy);
-            if(colorBy=="avgSpeed"){
-                this.updateColorCodesForColorRange(colorRange,true);
-                color = this.chooseColorByRange(colorRange, segmentInfo[colorBy],true);
-            }else{
-                this.updateColorCodesForColorRange(colorRange,false);
-                color = this.chooseColorByRange(colorRange, segmentInfo[colorBy],false);
+            if (colorBy == "avgSpeed") {
+                this.updateColorCodesForColorRange(colorRange, true);
+                color = this.chooseColorByRange(colorRange, segmentInfo[colorBy], true);
+            } else {
+                this.updateColorCodesForColorRange(colorRange, false);
+                color = this.chooseColorByRange(colorRange, segmentInfo[colorBy], false);
             }
-            
 
         }
         else {
@@ -355,26 +364,28 @@ export class MapComponent implements OnInit, AfterViewInit {
             switch (colorBy) {
 
                 case "avgSpeed":
-                    color = this.chooseColor(segmentInfo.avgSpeed, segmentData.minAvgSpeed, segmentData.maxAvgSpeed,true);
+                    color = this.chooseColor(segmentInfo.avgSpeed, segmentData.minAvgSpeed, segmentData.maxAvgSpeed, true);
                     break;
                 case "avgAccelY":
-                    color = this.chooseColor(segmentInfo.avgAccelY, segmentData.minAvgAccelY, segmentData.maxAvgAccelY,false);
+                    color = this.chooseColor(segmentInfo.avgAccelY, segmentData.minAvgAccelY, segmentData.maxAvgAccelY, false);
                     break;
                 case "standardDeviationFullMeanAccelY":
-                    color = this.chooseColor(segmentInfo.standardDeviationFullMeanAccelY, segmentData.minStandardDeviationFullMeanAccelY, segmentData.maxStandardDeviationFullMeanAccelY,false);
+                    color = this.chooseColor(segmentInfo.standardDeviationFullMeanAccelY, segmentData.minStandardDeviationFullMeanAccelY, segmentData.maxStandardDeviationFullMeanAccelY, false);
                     break;
                 case "standardDeviationSegmentMeanAccelY":
-                    color = this.chooseColor(segmentInfo.standardDeviationSegmentMeanAccelY, segmentData.minStandardDeviationSegmentMeanAccelY, segmentData.maxStandardDeviationSegmentMeanAccelY,false);
+                    color = this.chooseColor(segmentInfo.standardDeviationSegmentMeanAccelY, segmentData.minStandardDeviationSegmentMeanAccelY, segmentData.maxStandardDeviationSegmentMeanAccelY, false);
                     break;
                 case "avgRmsAccel":
-                    color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel,false);
+                    color = this.chooseColor(segmentInfo.avgRmsAccel, segmentData.minAvgRmsAccel, segmentData.maxAvgRmsAccel, false);
                     break;
                 case "thresholdAy":
-                    color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter,false);
+                    color = this.chooseColor(segmentInfo.aboveThresholdPerMeter, segmentData.minAboveThresholdPerMeter, segmentData.maxAboveThresholdPerMeter, false);
                     break;
                 case "iri":
-                    // console.log("iri type:" + segmentData.minIri + ",max:" + segmentData.maxIri);
-                    color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri,false);
+                    color = this.chooseColor(segmentInfo.iri, segmentData.minIri, segmentData.maxIri, false);
+                    break;
+                case "iri_ml":
+                    color = this.chooseColor(segmentInfo.iri_ml, segmentData.minIri_ml, segmentData.maxIri_ml, false);
                     break;
             }
         }
@@ -386,20 +397,50 @@ export class MapComponent implements OnInit, AfterViewInit {
         var popup = L.popup();
         var content = "";
 
-        content = '<div>'
-            + '<span><b> Time spent = </b>' + segmentInfo.timeSpent + ' s</span><br>'
-            + '<span><b> Average speed = </b>' + segmentInfo.avgSpeed.toFixed(2) + ' km/h</span><br>'
-            + '<span><b> Average accelY = </b>' + segmentInfo.avgAccelY.toFixed(4) + ' m/s2</span><br>'
-            + '<span><b> Average rms accel = </b>' + segmentInfo.avgRmsAccel.toFixed(4) + ' m/s2</span><br>'
-            + '<span><b> Above threshold = </b>' + segmentInfo.aboveThresholdPerMeter.toFixed(4) + ' per meter</span><br>'
-            + '<span><b> Above threshold count= </b>' + segmentInfo.aboveThreshold + ' </span><br>'
-            + '<span><b> SD full mean accelY = </b>' + segmentInfo.standardDeviationFullMeanAccelY.toFixed(4) + '</span><br>'
-            + '<span><b> SD segment mean accelY = </b>' + segmentInfo.standardDeviationSegmentMeanAccelY.toFixed(4) + '</span><br>'
-            + '<span><b> IRI = </b>' + segmentInfo.iri.toFixed(4) + '</span><br>'
+        content = 
+        '<div class="row" style="width:500px">'
+            +'<div class="col-6">'
+            + '<div class="">'
+                    + '<div class="row" style="padding:3px;padding-right:17px;">'
+                        + '<label class=" col-6"><b>Threhold aY</b></label>'
+                        + '<input id="inputbox" class="inputbox form-control col-6" type="number" placeholder="Threshold" value=0.15>'
+                        + '<label class=" col-6"><b>Segment size</b></label>'
+                        + '<select id="segmentSize" class="segmentSize form-control col-6">'
+                        + '<option value="100">100</option>'
+                        + '<option value="300">300</option>'
+                        + '<option value="500">500</option>'
+                        + '</select>'
+                    + '</div>'
+                + '<button style="" class="startpointbutton btn .btn-success" lat="' + e.latlng.lat + '" lon="' + e.latlng.lng + '">'
+                + 'start segmentation from here</button>'
+                + '</div>'
             + '</div>'
+            + '<div class="col-6" style="overflow:hidden;border: 2px solid gray; border-radius:3px;padding:2px">'
+                + '<span><b> Time spent = </b>' + segmentInfo.timeSpent + ' s</span><br>'
+                + '<span><b> Average speed = </b>' + segmentInfo.avgSpeed.toFixed(2) + ' km/h</span><br>'
+                + '<span><b> Average accelY = </b>' + segmentInfo.avgAccelY.toFixed(4) + ' m/s2</span><br>'
+                + '<span><b> Average rms accel = </b>' + segmentInfo.avgRmsAccel.toFixed(4) + ' m/s2</span><br>'
+                + '<span><b> Above threshold = </b>' + segmentInfo.aboveThresholdPerMeter.toFixed(4) + ' per meter</span><br>'
+                + '<span><b> Above threshold count= </b>' + segmentInfo.aboveThreshold + ' </span><br>'
+                + '<span><b> SD full mean accelY = </b>' + segmentInfo.standardDeviationFullMeanAccelY.toFixed(4) + '</span><br>'
+                + '<span><b> SD segment mean accelY = </b>' + segmentInfo.standardDeviationSegmentMeanAccelY.toFixed(4) + '</span><br>'
+                + '<span><b> IRI = </b>' + segmentInfo.iri.toFixed(4) + '</span><br>'
+                + '<span><b> IRI_ML = </b>' + segmentInfo.iri_ml.toFixed(4) + '</span><br>'
+            + '</div>'
+        +'</div>';
         popup.setLatLng(e.latlng)
             .setContent(content)
             .openOn(this.mymap);
+
+
+        // add event listener to newly added a.merch-link element
+        var startpointbutton = this.elementRef.nativeElement.querySelector(".startpointbutton");
+        var inputbox = this.elementRef.nativeElement.querySelector(".inputbox");
+        var selectbox = this.elementRef.nativeElement.querySelector(".segmentSize");
+        if (startpointbutton) {
+
+            startpointbutton.addEventListener('click', (e) => this.segmentRequest(e, inputbox.value, selectbox.value));
+        }
     }
     // todo implement this
     color1 = "#F5EE04";
@@ -426,7 +467,7 @@ export class MapComponent implements OnInit, AfterViewInit {
             colorIndex--;
         }
 
-        var color="";
+        var color = "";
         if (reverse) {
             var color = this.colors[this.colors.length - colorIndex - 1];
             if (this.colorCodes.length == 0) {

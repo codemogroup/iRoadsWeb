@@ -6,3 +6,11 @@ body {
 * {
     box-sizing: border-box;
 }
+
+.leaflet-popup{
+    width: 520px;
+}
+
+.leaflet-popup-content{
+    width: 100% !important;
+}

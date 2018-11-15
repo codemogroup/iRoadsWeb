@@ -30,5 +30,7 @@ export class SegmentWrapper {
     minIri;
     maxIri;
 
-    
+    minIri_ml;
+    maxIri_ml;
+
 }
